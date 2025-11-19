@@ -1,0 +1,130 @@
+.card {
+  background-color: #ffffff;
+  border-radius: 24rpx;
+  padding: 24rpx 28rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.03);
+}
+
+.card-main {
+  display: flex;
+  justify-content: space-between;
+}
+
+.left {
+  flex: 1;
+}
+
+.name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.location {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #999;
+}
+
+.nutrition {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #666;
+}
+
+/* 推荐模式的标签 */
+.tags {
+  margin-top: 10rpx;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tag {
+  padding: 4rpx 16rpx;
+  border-radius: 26rpx;
+  border: 1rpx solid #d0d4d8;
+  font-size: 22rpx;
+  color: #4f7a34;
+  background-color: #f4f8f0;
+  margin-right: 12rpx;
+  margin-bottom: 6rpx;
+}
+
+/* 菜单模式的“菜品详情” */
+.detail-link {
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: #4f7a34;
+}
+
+/* 右侧价格 */
+.right {
+  margin-left: 24rpx;
+  display: flex;
+  align-items: flex-start;
+}
+
+.price {
+  font-size: 28rpx;
+  color: #333;
+}
+
+/* 底部区域：加入饮食 + 图标 + 评分 */
+.card-footer {
+  margin-top: 18rpx;
+  padding-top: 14rpx;
+  border-top: 1rpx solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 加入饮食：加粗、和图标一行对齐 */
+.add-text {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #5b7b3a;
+}
+
+/* 右侧整组图标 */
+.footer-actions {
+  display: flex;
+  align-items: center;
+}
+
+/* 收藏 / 黑名单图标：统一大小，用颜色区分状态 */
+.icon {
+  font-size: 28rpx;
+  margin-left: 18rpx;
+  color: #c0c4c8;      /* 默认灰色 */
+}
+
+.icon-heart {
+  font-size: 30rpx;
+}
+
+.icon-block {
+  font-size: 24rpx;  
+}
+
+.icon.active {
+  color: #5b7b3a;      /* 选中变主绿色 */
+}
+
+/* 星级评分：5 个星号，亮/暗颜色 */
+.rating {
+  margin-left: 18rpx;
+  display: flex;
+  align-items: center;
+}
+
+.star {
+  font-size: 28rpx;
+  margin-right: 4rpx;
+  color: #d0d4d8;      /* 未选中 */
+}
+
+.star.active {
+  color: #5b7b3a;      /* 已选中 */
+}
