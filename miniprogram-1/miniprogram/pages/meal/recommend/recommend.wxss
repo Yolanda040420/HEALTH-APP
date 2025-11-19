@@ -1,0 +1,169 @@
+/* 页面基础 */
+.page {
+  padding: 20rpx;
+  background-color: #f6f7f8;
+}
+
+/* 顶部二级 Tab */
+.sub-tabs {
+  margin-top: 16rpx;
+  display: flex;
+  justify-content: center; 
+  border-bottom: 1rpx solid #e5e5e5;
+}
+
+.sub-tab {
+  padding: 0 40rpx 16rpx;
+  font-size: 28rpx;
+  color: #999;
+  position: relative;
+}
+
+.sub-tab.active {
+  color: #4f7a34;
+  font-weight: 600;
+}
+
+.sub-tab.active::after {
+  content: "";
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: 0;
+  height: 6rpx;
+  border-radius: 3rpx;
+  background-color: #4f7a34;
+}
+
+/* 主过滤栏标题 */
+/* 顶部：口味 / 营养 / 价格 / 时段 */
+.filter-header {
+  margin-top: 24rpx;
+  display: flex;
+  font-size: 24rpx;
+  color: #999;
+}
+
+.filter-header-item {
+  flex: 1;                     /* 每个占 1/4 宽度 */
+  display: flex;
+  align-items: center;
+  justify-content: center;     /* 文本居中 */
+}
+
+.filter-arrow {
+  margin-left: 6rpx;
+  font-size: 18rpx;
+}
+
+/* 下拉面板 */
+.dropdown-panel {
+  background-color: white;
+  border-radius: 16rpx;
+  padding: 20rpx 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.06);
+}
+
+.dropdown-option {
+  padding: 20rpx 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1rpx solid #eee;
+  font-size: 28rpx;
+  color: #444;
+}
+
+.dropdown-option:last-child {
+  border-bottom: none;
+}
+
+.dropdown-option.active {
+  color: #4f7a34;
+  font-weight: 600;
+}
+
+.option-radio {
+  width: 28rpx;
+  height: 28rpx;
+  border-radius: 50%;
+  border: 4rpx solid #ccc;
+}
+
+.option-radio.checked {
+  border-color: #4f7a34;
+}
+
+/* 横向滚动标签 */
+.quick-scroll {
+  margin-top: 10rpx;
+  white-space: nowrap;
+}
+
+.quick-tags {
+  display: inline-flex;
+  padding-bottom: 6rpx;
+}
+
+.quick-tag {
+  padding: 8rpx 24rpx;
+  margin-right: 12rpx;
+  border-radius: 30rpx;
+  border: 1rpx solid #dcdfe3;
+  font-size: 22rpx;
+  color: #666;
+  background-color: #f6f7f8;
+}
+
+.quick-tag.active {
+  background-color: #e7f2df;
+  color: #4f7a34;
+  border-color: #4f7a34;
+}
+
+/* 一键生成按钮 */
+.generate-btn {
+  margin: 28rpx 0;
+  background-color: #8EB97F;
+  color: white;
+  text-align: center;
+  padding: 24rpx;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+/* 菜品列表容器 */
+.dish-list {
+  margin-top: 12rpx;
+}
+
+/* 左侧两个悬浮按钮 */
+.float-btn {
+  position: fixed;
+  left: 24rpx;
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 20rpx;
+  background-color: #5b7b3a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.15);
+}
+
+.float-btn.like {
+  bottom: 220rpx;
+}
+
+.float-btn.block {
+  bottom: 110rpx;
+}
+
+.float-icon {
+  font-size: 40rpx;
+  color: #ffffff;  /* 两个都是白色 */
+}
+
+

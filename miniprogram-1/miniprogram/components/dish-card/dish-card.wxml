@@ -1,0 +1,55 @@
+<view class="card">
+  <!-- 上半部分：菜名 + 信息 -->
+  <view class="card-main">
+    <view class="left">
+      <view class="name">{{dish.name}}</view>
+      <view class="location">{{dish.location}}</view>
+      <view class="nutrition">
+        {{dish.kcal}} kcal · 蛋白质 {{dish.protein}} g
+      </view>
+
+      <!-- 推荐模式：显示标签 -->
+      <view wx:if="{{mode === 'recommend' && dish.tags && dish.tags.length}}" class="tags">
+        <block wx:for="{{dish.tags}}" wx:key="*this">
+          <view class="tag">{{item}}</view>
+        </block>
+      </view>
+
+      <!-- 菜单模式：显示菜品详情 -->
+      <view wx:if="{{mode === 'menu'}}" class="detail-link" bindtap="onDetailTap">
+        菜品详情
+      </view>
+    </view>
+
+    <view class="right">
+      <view class="price">¥ {{dish.price}}</view>
+    </view>
+  </view>
+
+  <!-- 下半部分：加入饮食 + 图标 + 评分 -->
+  <view class="card-footer">
+    <text class="add-text" bindtap="onAddTap">加入饮食</text>
+
+    <view class="footer-actions">
+      <text class="icon icon-heart {{dish.collected ? 'active' : ''}}"
+            bindtap="onLikeTap">
+        ♡
+      </text>
+
+      <text class="icon icon-block {{dish.blocked ? 'active' : ''}}"
+            bindtap="onBlockTap">
+        ⊘
+      </text>
+
+      <view class="rating">
+        <block wx:for="{{stars}}" wx:key="*this">
+          <text class="star {{item <= dish.rating ? 'active' : ''}}"
+                data-score="{{item}}"
+                bindtap="onRateTap">
+            ★
+          </text>
+        </block>
+      </view>
+    </view>
+  </view>
+</view>

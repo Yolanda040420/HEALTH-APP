@@ -1,0 +1,9 @@
+{
+  "pages": [
+    "pages/meal/recommend/recommend",
+    "pages/meal/menu/menu"
+  ],
+  "window": {
+    "navigationBarTitleText": "菜品推荐"
+  }
+}

@@ -1,0 +1,80 @@
+<!-- pages/meal/recommend/recommend.wxml -->
+
+<view class="page">
+
+<!-- 顶部二级 Tab：推荐 / 菜单 -->
+<view class="sub-tabs">
+  <view class="sub-tab {{activeTab==='recommend'?'active':''}}" data-tab="recommend" bindtap="onSubTabTap">推荐</view>
+  <view class="sub-tab {{activeTab==='menu'?'active':''}}" data-tab="menu" bindtap="onSubTabTap">菜单</view>
+</view>
+
+<!-- 口味 / 营养 / 价格 / 时段 -->
+<view class="filter-header">
+  <view class="filter-header-item" data-type="taste" bindtap="onFilterHeaderTap">
+    口味
+    <text class="filter-arrow">▾</text>
+  </view>
+  <view class="filter-header-item" data-type="nutrition" bindtap="onFilterHeaderTap">
+    营养
+    <text class="filter-arrow">▾</text>
+  </view>
+  <view class="filter-header-item" data-type="price" bindtap="onFilterHeaderTap">
+    价格
+    <text class="filter-arrow">▾</text>
+  </view>
+  <view class="filter-header-item" data-type="time" bindtap="onFilterHeaderTap">
+    时段
+    <text class="filter-arrow">▾</text>
+  </view>
+</view>
+
+<!-- 下拉面板 -->
+<view wx:if="{{dropdownVisible}}" class="dropdown-panel">
+  <view wx:for="{{dropdownOptions}}" wx:key="*this"
+        class="dropdown-option {{item===currentDropdownSelected?'active':''}}"
+        data-value="{{item}}"
+        bindtap="onDropdownOptionTap">
+    <text>{{item}}</text>
+    <view class="option-radio {{item===currentDropdownSelected?'checked':''}}"></view>
+  </view>
+</view>
+
+<!-- 横向滚动标签 -->
+<scroll-view scroll-x="true" class="quick-scroll">
+  <view class="quick-tags">
+    <view wx:for="{{quickTags}}" wx:key="value"
+          class="quick-tag {{activeQuickTag===item.value?'active':''}}"
+          data-value="{{item.value}}"
+          bindtap="onQuickTagTap">
+      {{item.label}}
+    </view>
+  </view>
+</scroll-view>
+
+<!-- 一键生成推荐 -->
+<view class="generate-btn" bindtap="onGenerate">一键生成今日推荐</view>
+
+<!-- 菜品列表 -->
+<view class="dish-list">
+  <block wx:for="{{dishes}}" wx:key="id">
+    <dish-card index="{{index}}"
+              dish="{{item}}"
+              mode="recommend"
+              bind:add="onAddMeal"
+              bind:like="onLikeDish"
+              bind:block="onBlockDish"
+              bind:rate="onRateDish"
+    />
+  </block>
+</view>
+
+<!-- 左侧悬浮按钮 -->
+<view class="float-btn like" bindtap="onOpenFavorites">
+  <text class="float-icon">♡</text>
+</view>
+
+<view class="float-btn block" bindtap="onOpenBlockList">
+  <text class="float-icon">⊘</text>
+</view>
+
+</view>
