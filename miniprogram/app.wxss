@@ -1,0 +1,38 @@
+@import "./iconfont/iconfont.wxss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+} 
+
+button {
+  background: initial;
+}
+
+button:focus{
+  outline: 0;
+}
+
+button::after{
+  border: none;
+}
+
+page {
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* 去除 tabbar 顶部边框（适配安卓） */
+.weui-tabbar {
+  border-top: 0 !important;
+}
+
+/* 修改底部 tabbar 文字大小 */
+.weui-tabbar__label {
+  font-size: 28rpx !important;
+}
+

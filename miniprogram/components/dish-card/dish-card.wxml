@@ -1,0 +1,103 @@
+<!-- components/dish-card/dish-card.wxml -->
+
+<!-- 推荐模式卡片 -->
+<view wx:if="{{mode === 'recommend'}}" class="dish-card recommend">
+
+<!-- 上半部分：左侧信息 + 右上角价格 -->
+<view class="top-row">
+  <view class="left">
+    <view class="name">{{dish.name}}</view>
+    <view class="location">{{dish.location}}</view>
+
+    <view class="meta">
+      {{dish.kcal}} kcal · 蛋白质 {{dish.protein}} g
+    </view>
+
+    <view class="tags">
+      <view wx:for="{{dish.tags}}" wx:key="*this" class="tag">
+        {{item}}
+      </view>
+    </view>
+  </view>
+
+  <view class="right">
+    <view class="price">¥ {{dish.price}}</view>
+  </view>
+</view>
+
+<!-- 下半部分：左“加入饮食”，右 icon + 星级 -->
+<view class="bottom-row">
+  <view class="add-text" bindtap="onAddTap">加入饮食</view>
+
+  <view class="actions">
+    <!-- 收藏：未收藏 icon-collection，已收藏 icon-collection_fill -->
+    <text
+      class="iconfont base-icon {{dish.collected ? 'icon-like_fill active' : 'icon-like'}}"
+      bindtap="onLikeTap">
+    </text>
+
+    <!-- 黑名单：icon-stop，点击后只改变颜色 -->
+    <text
+      class="iconfont base-icon block-icon {{dish.blocked ? 'blocked' : ''}} icon-stop"
+      bindtap="onBlockTap">
+    </text>
+
+    <!-- 星级评分：先用文字星星，后面可以换成 iconfont 星星 -->
+    <view class="stars">
+      <text wx:for="{{[1,2,3,4,5]}}" wx:key="*this"
+            class="star iconfont {{item <= dish.rating ? 'icon-collection_fill' : 'icon-collection'}}"
+            data-score="{{item}}"
+            bindtap="onStarTap">
+      </text>
+    </view>
+  </view>
+</view>
+
+</view>
+
+<!-- 菜单模式卡片 -->
+<view wx:elif="{{mode === 'menu'}}" class="dish-card menu">
+
+<!-- 上半部分：左信息 + 右圆角按钮 -->
+<view class="top-row">
+  <view class="left">
+    <view class="name">{{dish.name}}</view>
+    <view class="location">{{dish.location}}</view>
+
+    <view class="detail-link" bindtap="onDetailTap">
+      菜品详情
+    </view>
+  </view>
+
+  <view class="right">
+    <view class="add-btn" bindtap="onAddTap">加入饮食</view>
+  </view>
+</view>
+
+<!-- 下半部分：icon + 星级（靠右） -->
+<view class="bottom-row menu-bottom">
+  <view class="actions">
+    <!-- 菜单模式下的收藏 -->
+    <text
+      class="iconfont base-icon {{dish.collected ? 'icon-like_fill active' : 'icon-like'}}"
+      bindtap="onLikeTap">
+    </text>
+
+    <!-- 菜单模式下的黑名单 -->
+    <text
+      class="iconfont base-icon block-icon {{dish.blocked ? 'blocked' : ''}} icon-stop"
+      bindtap="onBlockTap">
+    </text>
+
+    <!-- 星级评分 -->
+    <view class="stars">
+      <text wx:for="{{[1,2,3,4,5]}}" wx:key="*this"
+            class="star iconfont {{item <= dish.rating ? 'icon-collection_fill' : 'icon-collection'}}"
+            data-score="{{item}}"
+            bindtap="onStarTap">
+      </text>
+    </view>
+  </view>
+</view>
+
+</view>

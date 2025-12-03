@@ -1,0 +1,45 @@
+{
+  "pages": [
+    "pages/meal/recommend/recommend",
+    "pages/diet-exercise/today/today",
+    "pages/forum/forum/forum",
+    "pages/forum/info/info",
+    "pages/mine/index/index",
+    "pages/mine/edit/edit"
+  ],
+  "window": {
+    "navigationBarTitleText": "菜品推荐"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#5b7b3a",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/meal/recommend/recommend",
+        "text": "用餐",
+        "iconPath": "images/tabbar/meal.png",
+        "selectedIconPath": "images/tabbar/meal-active.png"
+      },
+      {
+        "pagePath": "pages/diet-exercise/today/today",
+        "text": "记录",
+        "iconPath": "images/tabbar/record.png",
+        "selectedIconPath": "images/tabbar/record-active.png"
+      },
+      {
+        "pagePath": "pages/forum/forum/forum",
+        "text": "论坛",
+        "iconPath": "images/tabbar/forum.png",
+        "selectedIconPath": "images/tabbar/forum-active.png"
+      },
+      {
+        "pagePath": "pages/mine/index/index",
+        "text": "我的",
+        "iconPath": "images/tabbar/mine.png",
+        "selectedIconPath": "images/tabbar/mine-active.png"
+      }
+    ]
+  }
+}

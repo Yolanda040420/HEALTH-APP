@@ -1,0 +1,991 @@
+.page {
+  padding: 0;
+  background-color: #ffffff;
+  height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* 禁止整个页面滚动 */
+}
+
+/* 顶部二级 Tab：今日 / 历史 */
+.sub-tabs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1rpx solid #e5e5e5;
+  background-color: #ffffff;
+  z-index: 200;
+  flex-shrink: 0; /* 固定不滚动 */
+  padding: 0 20rpx;
+  box-sizing: border-box;
+  height: 88rpx; /* 固定高度 */
+}
+
+.sub-tab {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx 0;
+  font-size: 28rpx;
+  color: #999999;
+  position: relative;
+}
+
+.sub-tab.active {
+  color: #567722;
+  font-weight: 600;
+}
+
+.sub-tab.active::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 60rpx;
+  height: 4rpx;
+  border-radius: 2rpx;
+  background-color: #567722;
+}
+
+/* ================== 今日 Tab 样式 ================== */
+.today-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0 24rpx;
+  box-sizing: border-box;
+  background-color: #ffffff;
+}
+
+.today-scroll {
+  flex: 1;
+  min-height: 0;
+  height: 0;
+}
+
+.content-wrapper {
+  padding: 24rpx 0;
+  padding-bottom: 120rpx;
+}
+
+/* 通用卡片 */
+.card {
+  background-color: #fff;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+/* 今日能量卡片 */
+.summary-card {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32rpx;
+  padding-bottom: 40rpx;
+  background-color: #f9f9f9;
+  padding: 40rpx 24rpx;
+  min-height: 280rpx;
+  border: 1rpx solid #f3f3f3;
+  position: relative;
+}
+
+.summary-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1rpx;
+  background-color: #e5e5e5;
+}
+
+.summary-left {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 32rpx;
+}
+
+.circle {
+  width: 270rpx;
+  height: 270rpx;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  /* 下面这一句的具体颜色由 WXML 的 style 动态覆盖 */
+  background-color: #ececec;
+}
+
+.circle-progress {
+  position: absolute;
+  top: -36rpx;
+  left: -36rpx;
+  right: -36rpx;
+  bottom: -36rpx;
+  border-radius: 50%;
+  border: 36rpx solid #a7b78d;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  transform-origin: center;
+}
+
+.circle-progress-half {
+  position: absolute;
+  top: -36rpx;
+  left: -36rpx;
+  right: -36rpx;
+  bottom: -36rpx;
+  border-radius: 50%;
+  border: 36rpx solid #a7b78d;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  transform-origin: center;
+}
+
+
+.circle-inner {
+  width: 195rpx;
+  height: 195rpx;
+  border-radius: 50%;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.circle-label {
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.circle-percent {
+  margin-top: 8rpx;
+  font-size: 48rpx;
+  font-weight: 600;
+  color: #333;
+  line-height: 1;
+}
+
+.summary-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 32rpx;
+}
+
+.summary-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 28rpx;
+}
+
+.summary-item:last-child {
+  margin-bottom: 0;
+}
+
+.summary-icon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+  margin-top: 2rpx;
+}
+
+.summary-icon image {
+  width: 32rpx;
+  height: 32rpx;
+}
+
+.summary-icon.food-icon {
+  background-color: #d5ddc8;
+}
+
+.summary-icon.sport-icon {
+  background-color: #d5ddc8;
+}
+
+.summary-icon.net-icon {
+  background-color: #d5ddc8;
+}
+
+.summary-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.summary-label {
+  font-size: 24rpx;
+  color: #333;
+  margin-bottom: 4rpx;
+  line-height: 1.4;
+}
+
+.summary-value {
+  font-size: 32rpx;
+  color: #333;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* Section 标题 */
+.section {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 40rpx;
+  padding-bottom: 40rpx;
+  position: relative;
+}
+
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -24rpx;
+  right: -24rpx;
+  height: 1rpx;
+  background-color: #e6e6e6;
+}
+
+.section::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -24rpx;
+  right: -24rpx;
+  height: 1rpx;
+  background-color: #e6e6e6;
+}
+
+.section:last-child::after {
+  display: none;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 24rpx;
+  margin-left: 24rpx;
+}
+
+/* 快捷按钮 */
+.quick-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.quick-btn {
+  flex: 1;
+  height: 140rpx;
+  border-radius: 20rpx;
+  background-color: #d5ddc8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.04);
+}
+
+.quick-icon {
+  width: 48rpx;
+  height: 48rpx;
+  margin-bottom: 10rpx;
+}
+
+.quick-icon image {
+  width: 100%;
+  height: 100%;
+}
+
+.quick-text {
+  font-size: 26rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+/* 今日饮食列表 */
+.meal-card {
+  display: flex;
+  margin-bottom: 16rpx;
+  align-items: center;
+  padding: 20rpx;
+  background-color: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+
+.meal-card:last-child {
+  margin-bottom: 0;
+}
+
+/* 空状态提示 */
+.meal-card.empty-hint {
+  justify-content: center;
+  padding: 40rpx 20rpx;
+}
+
+.empty-hint-text {
+  font-size: 26rpx;
+  color: #999;
+  text-align: center;
+}
+
+.meal-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.meal-icon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background-color: #d5ddc8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+}
+
+.meal-icon image {
+  width: 32rpx;
+  height: 32rpx;
+}
+
+.meal-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.meal-name {
+  font-size: 26rpx;
+  color: #333;
+  margin-bottom: 6rpx;
+  font-weight: 500;
+}
+
+.meal-desc {
+  font-size: 22rpx;
+  color: #888;
+  line-height: 1.4;
+}
+
+.meal-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+
+.meal-kcal {
+  font-size: 26rpx;
+  color: #567722;
+  margin-bottom: 8rpx;
+  font-weight: 600;
+}
+
+.meal-actions {
+  display: flex;
+  gap: 16rpx;
+}
+
+.meal-action {
+  font-size: 22rpx;
+  color: #666;
+}
+
+.meal-action.delete {
+  color: #c0392b;
+}
+
+.meal-action.disabled {
+  color: #ccc;
+  pointer-events: none;
+}
+
+.meal-action.delete.disabled {
+  color: #ccc;
+}
+
+/* ================== 历史 Tab 样式 ================== */
+.history-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+/* 日期选择行（固定） */
+.date-selector-row {
+  height: 90rpx;
+  display: flex;
+  align-items: center;              /* 整行垂直居中关键 */
+  justify-content: space-between;
+  padding: 20rpx 24rpx;
+  background-color: #ffffff;
+  border-bottom: 1rpx solid #e5e5e5;
+  flex-shrink: 0;
+  z-index: 10;
+  box-sizing: border-box;
+  margin-bottom: 24rpx;
+}
+
+.date-selector-label {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+/* 右侧整体 */
+.date-selector-right {
+  display: flex;
+  align-items: center;              /* 右侧垂直居中 */
+  gap: 16rpx;
+  flex-shrink: 0;
+}
+
+/* 直接给 picker 设为 flex，居中它的内容 */
+picker {
+  display: flex;
+  align-items: center;
+}
+
+/* picker 里的“日期文字 + 箭头” */
+.date-selector-value {
+  display: flex;
+  align-items: center;
+}
+
+.date-text {
+  font-size: 28rpx;
+  margin-right: 8rpx;
+}
+
+/* 未选择日期：灰色 */
+.date-text.placeholder {
+  color: #999;
+  font-weight: 400;
+}
+
+/* 已选择日期：绿色加粗 */
+.date-text.filled {
+  color: #567722;
+  font-weight: 600;
+}
+
+/* 箭头稍微小一点，看起来居中 */
+.date-arrow {
+  font-size: 24rpx;
+  color: #567722;
+}
+
+/* 清空按钮 */
+.date-clear-btn {
+  font-size: 24rpx;
+  color: #999;
+  padding: 8rpx 16rpx;
+  border: 1rpx solid #e5e5e5;
+  border-radius: 8rpx;
+  background-color: #f5f5f5;
+  flex-shrink: 0;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* 日期头部 */
+.date-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 24rpx;
+  background-color: #d5ddc8;
+  margin: 24rpx;
+  margin-top: 20rpx;
+  border-radius: 12rpx;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.date-header.hidden {
+  display: none;
+}
+
+.date-header-text {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 600;
+}
+
+.date-header-arrow {
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1;
+  transition: transform 0.3s ease;
+}
+
+.date-header-arrow.collapsed {
+  transform: rotate(180deg);
+}
+
+/* 日期卡片内容区域（可收起/展开） */
+.date-card-content {
+  overflow: visible;
+  transition: max-height 0.4s ease;
+  max-height: 5000rpx;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.date-card-content.collapsed {
+  max-height: 0;
+  overflow: hidden;
+}
+
+/* 日期选择器展开区域 */
+.date-picker-container {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  margin: 0 24rpx;
+  background-color: #ffffff;
+  border-radius: 12rpx;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.date-picker-container.expanded {
+  max-height: 200rpx;
+  margin-bottom: 20rpx;
+}
+
+.date-picker-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 24rpx;
+}
+
+.date-picker-label {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.date-picker-value {
+  font-size: 28rpx;
+  color: #567722;
+  font-weight: 600;
+}
+
+/* 统计卡片（固定） */
+.stats-cards {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin: 0 0 24rpx 0;
+  gap: 32rpx;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.stat-card {
+  width: 160rpx;
+  height: 160rpx;
+  background-color: #aabb90;
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+  flex-grow: 0;
+  box-sizing: border-box;
+}
+
+.stat-card::before {
+  content: '';
+  display: block;
+  padding-top: 100%;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #ffffff;
+  text-align: center;
+  line-height: 1.2;
+  font-weight: 550;
+  position: absolute;
+  top: 31%;
+  left: 0;
+  right: 0;
+  padding: 0 8rpx;
+  box-sizing: border-box;
+}
+
+.stat-value {
+  font-size: 24rpx;
+  color: #ffffff;
+  font-weight: 550;
+  text-align: center;
+  line-height: 1.2;
+  position: absolute;
+  bottom: 31%;
+  left: 0;
+  right: 0;
+  padding: 0 8rpx;
+  box-sizing: border-box;
+}
+
+/* 历史滚动区域 */
+.history-scroll {
+  flex: 1;
+  min-height: 0;
+  height: 0;
+  padding: 0 24rpx;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.history-scroll .content-wrapper {
+  padding: 0;
+  padding-bottom: 120rpx;
+}
+
+/* 日期分组卡片容器 */
+.date-group-card {
+  background-color: #ffffff;
+  border: 1rpx solid #e5e5e5;
+  border-radius: 16rpx;
+  margin: 0 24rpx 24rpx 24rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.date-group-card:first-child {
+  margin-top: 0;
+}
+
+/* 日期分组头部 */
+.date-group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 24rpx;
+  background-color: #d5ddc8;
+  cursor: pointer;
+  border-bottom: 1rpx solid rgba(0, 0, 0, 0.05);
+}
+
+.date-group-text {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 600;
+}
+
+.date-group-arrow {
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1;
+  transition: transform 0.3s ease;
+}
+
+.date-group-arrow.collapsed {
+  transform: rotate(180deg);
+}
+
+/* 日期分组内容区域（可收起/展开） */
+.date-group-content {
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  max-height: 5000rpx;
+  padding: 24rpx;
+  padding-bottom: 24rpx;
+}
+
+.date-group-content.collapsed {
+  max-height: 0;
+  padding: 0 24rpx;
+}
+
+/* 记录区域 */
+.record-section {
+  margin-bottom: 32rpx;
+}
+
+.record-section:last-child {
+  margin-bottom: 0;
+}
+
+.record-section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.record-icon {
+  width: 28rpx;
+  height: 28rpx;
+  margin-right: 8rpx;
+  flex-shrink: 0;
+}
+
+.record-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+/* 记录列表 */
+.record-list {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* 表格容器 */
+.record-table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* 表格行 */
+.record-row {
+  display: table-row;
+  padding: 20rpx 0;
+}
+
+/* 表格单元格 */
+.record-cell {
+  display: table-cell;
+  padding: 20rpx;
+  vertical-align: middle;
+  border: none;
+}
+
+.record-cell:first-child {
+  padding-left: 20rpx;
+}
+
+.record-cell:last-child {
+  padding-right: 20rpx;
+}
+
+/* 名称列 */
+.record-name {
+  font-size: 26rpx;
+  color: #333;
+  text-align: left;
+  width: auto;
+}
+
+/* 数量列 */
+.record-quantity {
+  font-size: 24rpx;
+  color: #666;
+  text-align: center;
+  width: 80rpx;
+  padding-left: 24rpx;
+  padding-right: 24rpx;
+}
+
+/* 热量列 */
+.record-kcal {
+  font-size: 26rpx;
+  color: #567722;
+  font-weight: 600;
+  text-align: right;
+  width: 120rpx;
+}
+
+/* ================== 弹窗样式 ================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  width: 85%;
+  max-width: 700rpx;
+  max-height: 80%;
+  background-color: #ffffff;
+  border-radius: 24rpx;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50rpx);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx 40rpx;
+  border-bottom: 1rpx solid #e5e5e5;
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.modal-close {
+  font-size: 40rpx;
+  color: #999;
+  line-height: 1;
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.modal-close:active {
+  background-color: #f5f5f5;
+}
+
+.modal-body {
+  padding: 40rpx;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.form-item {
+  margin-bottom: 32rpx;
+}
+
+.form-item:last-child {
+  margin-bottom: 0;
+}
+
+.form-label {
+  display: block;
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 16rpx;
+  font-weight: 500;
+}
+
+.form-input {
+  width: 100%;
+  height: 80rpx;
+  padding: 0 24rpx;
+  background-color: #f5f5f5;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.form-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 80rpx;
+  padding: 0 24rpx;
+  background-color: #f5f5f5;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.picker-arrow {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 24rpx;
+  margin-top: 40rpx;
+  padding-top: 32rpx;
+  border-top: 1rpx solid #e5e5e5;
+}
+
+.form-btn {
+  flex: 1;
+  height: 88rpx;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-btn.cancel {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.form-btn.submit {
+  background-color: #567722;
+  color: #ffffff;
+}
+
+.form-btn::after {
+  border: none;
+}

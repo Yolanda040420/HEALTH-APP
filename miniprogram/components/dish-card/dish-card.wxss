@@ -1,0 +1,182 @@
+/* 通用卡片外观 */
+.dish-card {
+  background-color: #ffffff;
+  border-radius: 20rpx;
+  padding: 20rpx 24rpx;
+  margin: 16rpx 24rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
+}
+
+/* 顶部：左信息 + 右侧区域 */
+.top-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.left {
+  flex: 1;
+  padding-right: 20rpx;
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* 标题和地点 */
+.name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 4rpx;
+}
+
+.location {
+  font-size: 24rpx;
+  color: #888888;
+  margin-bottom: 4rpx;
+}
+
+/* ===== 推荐模式：营养 + 标签 + 右上角价格 ===== */
+
+.recommend .meta {
+  font-size: 22rpx;
+  color: #999999;
+  margin-bottom: 8rpx;
+  margin-top: 10rpx;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tag {
+  font-size: 20rpx;
+  color: #5b7b3a;
+  background-color: #e6f0dd;
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+  margin-right: 8rpx;
+  margin-top: 6rpx;
+  margin-bottom: 6rpx;
+}
+
+.recommend .price {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+/* ===== 菜单模式：菜品详情 + 右侧按钮 ===== */
+
+.detail-link {
+  font-size: 22rpx;
+  color: #5b7b3a;
+  margin-top: 8rpx;
+}
+
+.menu .add-btn {
+  padding: 10rpx 24rpx;
+  border-radius: 30rpx;
+  background-color: #b8c88f;
+  color: #ffffff;
+  font-size: 24rpx;
+  margin-top: 10rpx;
+}
+
+/* ===== 底部区域（两种模式共用） ===== */
+
+.bottom-row {
+  margin-top: 16rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 菜单模式：底部整体靠右一点 */
+.menu-bottom {
+  justify-content: flex-end;
+}
+
+/* 推荐模式左侧“加入饮食” */
+.add-text {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #5b7b3a;
+  line-height: 32rpx;
+  flex-shrink: 0;
+}
+
+/* 右侧图标区域：心 + 禁止 + 星星 */
+.actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;        /* 强制不换行 */
+}
+
+/* iconfont 图标的公共样式 */
+.base-icon {
+  font-size: 26rpx;      /* 图标大小 */
+  color: #b0b0b0;        /* 默认灰色 */
+  margin-right: 12rpx;
+  line-height: 1;
+}
+
+/* 收藏图标大小 */
+.icon-like,
+.icon-like_fill {
+  font-size: 26rpx !important;
+}
+
+/* 黑名单图标大小 */
+.icon-stop {
+  font-size: 22rpx !important;
+}
+
+/* 收藏激活时（用 fill 图标 + 高亮颜色）*/
+.base-icon.active {
+  color: #5b7b3a;
+}
+
+/* 黑名单图标 */
+.block-icon.blocked {
+  color: #5b7b3a; 
+}
+
+/* 星级部分 */
+.stars {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.star {
+  font-size: 26rpx;
+  margin-left: 4rpx;
+  color: #d0d0d0;
+  line-height: 1;
+}
+
+/* 未选中星星颜色 */
+.star.icon-collection {
+  color: #d0d0d0;      /* 灰色 */
+}
+
+/* 选中星星颜色（绿色） */
+.star.icon-collection_fill {
+  color: #5b7b3a !important;
+}
+
+.actions .iconfont {
+  height: 26rpx;           /* 图标框高度 */
+  display: flex;
+  align-items: center;     /* 垂直居中 */
+  justify-content: center; /* 水平居中 */
+  line-height: 1;          /* 去除字体本身行高 */
+}

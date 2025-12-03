@@ -1,0 +1,25 @@
+// 判断 quickTag 是否应该高亮显示
+function isQuickTagActive(tagValue, selectedFilters, activeQuickTag) {
+  var tagToFilterMap = {
+    'breakfast': { type: 'time', value: '早餐' },
+    'lunch': { type: 'time', value: '午餐' },
+    'dinner': { type: 'time', value: '晚餐' },
+    'lowfat': { type: 'nutrition', value: '低脂' },
+    'mild': { type: 'taste', value: '微辣' },
+    'lt5': { type: 'price', value: '≤5元' },
+    'lt10': { type: 'price', value: '≤10元' }
+  };
+  
+  var filterMap = tagToFilterMap[tagValue];
+  if (filterMap) {
+    return selectedFilters[filterMap.type] === filterMap.value;
+  }
+  
+  // 对于没有映射关系的标签（如 lt500, lt700），使用 activeQuickTag 判断
+  return activeQuickTag === tagValue;
+}
+
+module.exports = {
+  isQuickTagActive: isQuickTagActive
+};
+
