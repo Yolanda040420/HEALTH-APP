@@ -1,0 +1,447 @@
+/* 页面基础 */
+.page {
+  padding: 0;
+  background-color: #fff;
+  min-height: 100vh;
+  padding-bottom: 120rpx;
+}
+
+/* 用户信息头部 */
+.profile-header {
+  display: flex;
+  align-items: center;
+  padding: 40rpx 24rpx;
+  padding-bottom: 60rpx;
+  background: linear-gradient(180deg, #e6f0dd 0%, #ffffff 100%);
+}
+
+.profile-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-left: 24rpx;
+  margin-right: 24rpx;
+  background-color: #e0e0e0;
+  border: 5rpx solid #fff;
+}
+
+.profile-avatar image {
+  width: 100%;
+  height: 100%;
+}
+
+.profile-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-name {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.profile-subtitle {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 16rpx;
+}
+
+/* 个人信息卡片 */
+.info-card {
+  background-color: #ffffff;
+  margin: 0 24rpx 24rpx 24rpx;
+  margin-top: -40rpx;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-item-left {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.info-icon {
+  width: 32rpx;
+  height: 32rpx;
+  flex-shrink: 0;
+}
+
+.info-label {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.info-value {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+/* 章节标题样式 */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
+}
+
+.section-title-icon {
+  width: 32rpx;
+  height: 32rpx;
+}
+
+.section-title-text {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+/* 健身目标 */
+.goals-section {
+  background-color: #ffffff;
+  margin: 0 24rpx 24rpx 24rpx;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  border: 1rpx solid #f0f0f0;
+}
+
+.goals-container {
+  display: flex;
+  gap: 16rpx;
+}
+
+.goal-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24rpx;
+  border-radius: 16rpx;
+  background-color: #ffffff;
+  gap: 12rpx;
+  border: 1rpx solid #f0f0f0;
+  margin-top: 16rpx;
+}
+
+.goal-item image {
+  display: block;
+}
+
+.goal-item.active {
+  background-color: #d5ddc8;
+  border-color: #d5ddc8;
+}
+
+.goal-icon {
+  width: 40rpx;
+  height: 40rpx;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.goal-text {
+  font-size: 26rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+/* 能量平衡卡片 */
+.energy-card {
+  background-color: #ffffff;
+  margin: 24rpx;
+  border-radius: 16rpx;
+  padding: 40rpx 24rpx;
+  display: flex;
+  align-items: center;
+  gap: 32rpx;
+}
+
+.energy-circle-wrapper {
+  flex-shrink: 0;
+}
+
+.energy-circle {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 50%;
+  border: 18rpx solid #e0e0e0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-color: #fff;
+}
+
+.energy-progress {
+  position: absolute;
+  top: -18rpx;
+  left: -18rpx;
+  right: -18rpx;
+  bottom: -18rpx;
+  border-radius: 50%;
+  border: 18rpx solid transparent;
+  border-top-color: #567722;
+  border-right-color: #567722;
+  transform-origin: center;
+}
+
+.energy-inner {
+  width: 164rpx;
+  height: 164rpx;
+  border-radius: 50%;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.energy-label {
+  font-size: 22rpx;
+  color: #666;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.energy-percent {
+  margin-top: 8rpx;
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #567722;
+  line-height: 1;
+}
+
+.energy-stats {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 28rpx;
+}
+
+.energy-stat-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+}
+
+.energy-stat-icon {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  background-color: #567722;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.energy-stat-icon image {
+  width: 24rpx;
+  height: 24rpx;
+}
+
+.energy-stat-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.energy-stat-label {
+  font-size: 24rpx;
+  color: #333;
+  margin-bottom: 4rpx;
+  line-height: 1.4;
+}
+
+.energy-stat-value {
+  font-size: 26rpx;
+  color: #333;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* 今日摄入 */
+.intake-section {
+  background-color: #ffffff;
+  margin: 0 24rpx 24rpx 24rpx;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  border: 1rpx solid #f0f0f0;
+}
+
+.intake-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.intake-progress {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  flex-shrink: 0;
+}
+
+.intake-current {
+  margin-top: -20rpx;
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 600;
+}
+
+.intake-target {
+  margin-top: -24rpx;
+  font-size: 28rpx;
+  color: #999;
+}
+
+.intake-bar {
+  margin-top: 16rpx;
+}
+
+.intake-bar-bg {
+  height: 28rpx;
+  background-color: #f0f0f0;
+  border-radius: 28rpx;
+  overflow: hidden;
+  margin-bottom: 8rpx;
+}
+
+.intake-bar-fill {
+  height: 100%;
+  background-color: #567722;
+  border-radius: 28rpx;
+  transition: width 0.3s;
+}
+
+.intake-labels {
+  display: flex;
+  justify-content: space-between;
+}
+
+.intake-label {
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: #999;
+}
+
+/* 今日饮食列表 */
+.meals-section {
+  background-color: #ffffff;
+  margin: 24rpx;
+  border-radius: 16rpx;
+  padding: 24rpx;
+}
+
+.meal-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.meal-item:last-child {
+  border-bottom: none;
+}
+
+.meal-icon {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  background-color: #e6f0dd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+}
+
+.meal-icon image {
+  width: 36rpx;
+  height: 36rpx;
+}
+
+.meal-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.meal-name {
+  font-size: 26rpx;
+  color: #333;
+  margin-bottom: 6rpx;
+  font-weight: 500;
+}
+
+.meal-desc {
+  font-size: 22rpx;
+  color: #888;
+  line-height: 1.4;
+}
+
+.meal-kcal {
+  font-size: 26rpx;
+  color: #4a7c2b;
+  font-weight: 600;
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+
+/* 分隔线 */
+.divider {
+  height: 1rpx;
+  background-color: #f0f0f0;
+  margin: 0 24rpx 24rpx 24rpx;
+}
+
+/* 编辑个人信息按钮 */
+.edit-btn {
+  margin: 24rpx;
+  padding: 32rpx;
+  background-color: #aabb90;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+}
+
+.edit-icon {
+  width: 32rpx;
+  height: 32rpx;
+}
+
+.edit-text {
+  font-size: 28rpx;
+  color: #fff;
+  font-weight: 550;
+}

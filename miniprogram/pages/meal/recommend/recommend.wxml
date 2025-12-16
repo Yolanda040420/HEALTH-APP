@@ -1,80 +1,242 @@
 <!-- pages/meal/recommend/recommend.wxml -->
+<wxs module="filterHelper" src="./recommend.wxs"></wxs>
 
 <view class="page">
 
 <!-- 顶部二级 Tab：推荐 / 菜单 -->
 <view class="sub-tabs">
-  <view class="sub-tab {{activeTab==='recommend'?'active':''}}" data-tab="recommend" bindtap="onSubTabTap">推荐</view>
-  <view class="sub-tab {{activeTab==='menu'?'active':''}}" data-tab="menu" bindtap="onSubTabTap">菜单</view>
-</view>
-
-<!-- 口味 / 营养 / 价格 / 时段 -->
-<view class="filter-header">
-  <view class="filter-header-item" data-type="taste" bindtap="onFilterHeaderTap">
-    口味
-    <text class="filter-arrow">▾</text>
+  <view class="sub-tab {{activeTab==='recommend'?'active':''}}"
+        data-tab="recommend"
+        bindtap="onSubTabTap">
+    推荐
   </view>
-  <view class="filter-header-item" data-type="nutrition" bindtap="onFilterHeaderTap">
-    营养
-    <text class="filter-arrow">▾</text>
-  </view>
-  <view class="filter-header-item" data-type="price" bindtap="onFilterHeaderTap">
-    价格
-    <text class="filter-arrow">▾</text>
-  </view>
-  <view class="filter-header-item" data-type="time" bindtap="onFilterHeaderTap">
-    时段
-    <text class="filter-arrow">▾</text>
+  <view class="sub-tab {{activeTab==='menu'?'active':''}}"
+        data-tab="menu"
+        bindtap="onSubTabTap">
+    菜单
   </view>
 </view>
 
-<!-- 下拉面板 -->
-<view wx:if="{{dropdownVisible}}" class="dropdown-panel">
-  <view wx:for="{{dropdownOptions}}" wx:key="*this"
-        class="dropdown-option {{item===currentDropdownSelected?'active':''}}"
-        data-value="{{item}}"
-        bindtap="onDropdownOptionTap">
-    <text>{{item}}</text>
-    <view class="option-radio {{item===currentDropdownSelected?'checked':''}}"></view>
-  </view>
-</view>
+<!-- ================== 推荐 Tab 内容 ================== -->
+<block wx:if="{{activeTab==='recommend'}}">
+  <view class="recommend-content">
 
-<!-- 横向滚动标签 -->
-<scroll-view scroll-x="true" class="quick-scroll">
-  <view class="quick-tags">
-    <view wx:for="{{quickTags}}" wx:key="value"
-          class="quick-tag {{activeQuickTag===item.value?'active':''}}"
-          data-value="{{item.value}}"
-          bindtap="onQuickTagTap">
-      {{item.label}}
+  <!-- 口味 / 营养 / 价格 / 时段 -->
+  <view class="filter-header">
+    <view class="filter-header-item {{selectedFilters.taste ? 'has-selected' : ''}}" data-type="taste" bindtap="onFilterHeaderTap">
+      <text class="filter-label" wx:if="{{!selectedFilters.taste}}">口味</text>
+      <text class="filter-value" wx:if="{{selectedFilters.taste}}">{{selectedFilters.taste}}</text>
+      <text class="filter-arrow">▾</text>
+    </view>
+    <view class="filter-header-item {{selectedFilters.nutrition ? 'has-selected' : ''}}" data-type="nutrition" bindtap="onFilterHeaderTap">
+      <text class="filter-label" wx:if="{{!selectedFilters.nutrition}}">营养</text>
+      <text class="filter-value" wx:if="{{selectedFilters.nutrition}}">{{selectedFilters.nutrition}}</text>
+      <text class="filter-arrow">▾</text>
+    </view>
+    <view class="filter-header-item {{selectedFilters.price ? 'has-selected' : ''}}" data-type="price" bindtap="onFilterHeaderTap">
+      <text class="filter-label" wx:if="{{!selectedFilters.price}}">价格</text>
+      <text class="filter-value" wx:if="{{selectedFilters.price}}">{{selectedFilters.price}}</text>
+      <text class="filter-arrow">▾</text>
+    </view>
+    <view class="filter-header-item {{selectedFilters.time ? 'has-selected' : ''}}" data-type="time" bindtap="onFilterHeaderTap">
+      <text class="filter-label" wx:if="{{!selectedFilters.time}}">时段</text>
+      <text class="filter-value" wx:if="{{selectedFilters.time}}">{{selectedFilters.time}}</text>
+      <text class="filter-arrow">▾</text>
     </view>
   </view>
-</scroll-view>
 
-<!-- 一键生成推荐 -->
-<view class="generate-btn" bindtap="onGenerate">一键生成今日推荐</view>
+  <!-- 下拉面板 -->
+  <view wx:if="{{dropdownVisible}}" class="dropdown-panel">
+    <view wx:for="{{dropdownOptions}}" wx:key="*this"
+          class="dropdown-option {{item===currentDropdownSelected?'active':''}}"
+          data-value="{{item}}"
+          bindtap="onDropdownOptionTap">
+      <text>{{item}}</text>
+      <view class="option-radio {{item===currentDropdownSelected?'checked':''}}"></view>
+    </view>
+  </view>
 
-<!-- 菜品列表 -->
-<view class="dish-list">
-  <block wx:for="{{dishes}}" wx:key="id">
-    <dish-card index="{{index}}"
-              dish="{{item}}"
-              mode="recommend"
-              bind:add="onAddMeal"
-              bind:like="onLikeDish"
-              bind:block="onBlockDish"
-              bind:rate="onRateDish"
-    />
-  </block>
-</view>
+  <!-- 横向滚动标签 -->
+  <scroll-view scroll-x="true" class="quick-scroll">
+    <view class="quick-tags">
+      <view wx:for="{{quickTags}}" wx:key="value"
+            class="quick-tag {{filterHelper.isQuickTagActive(item.value, selectedFilters, activeQuickTag) ? 'active' : ''}}"
+            data-value="{{item.value}}"
+            bindtap="onQuickTagTap">
+        {{item.label}}
+      </view>
+    </view>
+  </scroll-view>
 
-<!-- 左侧悬浮按钮 -->
-<view class="float-btn like" bindtap="onOpenFavorites">
-  <text class="float-icon">♡</text>
-</view>
+  <!-- 推荐菜品列表 -->
+  <scroll-view class="dish-list" scroll-y="true">
+    <!-- 一键生成推荐 -->
+    <view class="generate-btn" bindtap="onGenerate">一键生成今日推荐</view>
+    <block wx:for="{{recommendDishes}}" wx:key="id" wx:if="{{!item.blocked}}">
+      <dish-card index="{{index}}"
+                 dish="{{item}}"
+                 mode="recommend"
+                 bind:add="onAddMealFromRecommend"
+                 bind:like="onLikeDishFromRecommend"
+                 bind:block="onBlockDishFromRecommend"
+                 bind:rate="onRateDishFromRecommend"
+      />
+    </block>
+  </scroll-view>
 
-<view class="float-btn block" bindtap="onOpenBlockList">
-  <text class="float-icon">⊘</text>
-</view>
+  <!-- 左侧悬浮按钮 -->
+  <view class="float-btn like" bindtap="onOpenFavorites">
+    <image class="float-icon-img" src="/images/recommend/like.png" mode="aspectFit"></image>
+  </view>
+
+  <view class="float-btn block" bindtap="onOpenBlockList">
+    <image class="float-icon-img" src="/images/recommend/block.png" mode="aspectFit"></image>
+  </view>
+
+  <!-- 收藏/黑名单弹窗 -->
+  <view wx:if="{{modalVisible}}" class="modal-overlay" bindtap="onCloseModal">
+    <view class="modal-content" catchtap="onModalContentTap">
+      <!-- 弹窗头部 -->
+      <view class="modal-header">
+        <text class="modal-title">{{modalType === 'favorites' ? '我的收藏' : '黑名单'}}</text>
+        <text class="modal-close" bindtap="onCloseModal">✕</text>
+      </view>
+      
+      <!-- 弹窗内容 -->
+      <scroll-view class="modal-body" scroll-y="true">
+        <view wx:if="{{modalType === 'favorites' && favoriteDishes.length === 0}}" class="empty-state">
+          <text>暂无收藏的菜品</text>
+        </view>
+        <view wx:if="{{modalType === 'blocked' && blockedDishes.length === 0}}" class="empty-state">
+          <text>黑名单为空</text>
+        </view>
+        
+        <block wx:if="{{modalType === 'favorites'}}">
+          <view wx:for="{{favoriteDishes}}" wx:key="id" class="modal-dish-item">
+            <view class="modal-dish-name">{{item.name}}</view>
+            <text class="modal-remove-btn" data-index="{{index}}" bindtap="onRemoveFromFavorites">−</text>
+          </view>
+        </block>
+        
+        <block wx:if="{{modalType === 'blocked'}}">
+          <view wx:for="{{blockedDishes}}" wx:key="id" class="modal-dish-item">
+            <view class="modal-dish-name">{{item.name}}</view>
+            <text class="modal-remove-btn" data-index="{{index}}" bindtap="onRemoveFromBlocked">−</text>
+          </view>
+        </block>
+      </scroll-view>
+    </view>
+  </view>
+  </view>
+
+</block>
+
+<!-- ================== 菜单 Tab 内容 ================== -->
+<block wx:elif="{{activeTab==='menu'}}">
+  <view class="menu-content">
+    <!-- 筛选行：食堂 / 档口 / 餐别 -->
+    <view class="filter-row-wrapper">
+      <view class="filter-row">
+        <view class="filter-select {{selectedMenuFilters.canteen ? 'has-selected' : ''}}" bindtap="onCanteenTap">
+          <text class="filter-label" wx:if="{{!selectedMenuFilters.canteen}}">食堂</text>
+          <text class="filter-value" wx:if="{{selectedMenuFilters.canteen}}">{{selectedMenuFilters.canteen}}</text>
+          <text class="arrow">▾</text>
+        </view>
+        <view class="filter-select {{selectedMenuFilters.window ? 'has-selected' : ''}}" bindtap="onWindowTap">
+          <text class="filter-label" wx:if="{{!selectedMenuFilters.window}}">档口</text>
+          <text class="filter-value" wx:if="{{selectedMenuFilters.window}}">{{selectedMenuFilters.window}}</text>
+          <text class="arrow">▾</text>
+        </view>
+        <view class="filter-select {{selectedMenuFilters.type ? 'has-selected' : ''}}" bindtap="onTypeTap">
+          <text class="filter-label" wx:if="{{!selectedMenuFilters.type}}">餐别</text>
+          <text class="filter-value" wx:if="{{selectedMenuFilters.type}}">{{selectedMenuFilters.type}}</text>
+          <text class="arrow">▾</text>
+        </view>
+      </view>
+
+      <!-- 菜单下拉面板 -->
+      <view wx:if="{{menuDropdownVisible}}" class="dropdown-panel menu-dropdown">
+      <scroll-view class="menu-dropdown-scroll" scroll-y="true">
+        <block wx:if="{{activeMenuFilter === 'canteen'}}">
+          <!-- 食堂：显示分类和子项 -->
+          <view wx:for="{{menuDropdownOptions}}" wx:key="index" wx:for-index="idx">
+            <view wx:if="{{item.type === 'category'}}" class="dropdown-category">
+              {{item.label}}
+            </view>
+            <view wx:else
+                  class="dropdown-option {{item.label===currentMenuDropdownSelected?'active':''}}"
+                  data-index="{{idx}}"
+                  bindtap="onMenuDropdownOptionTap">
+              <text class="dropdown-item-text">{{item.label}}</text>
+              <view class="option-radio {{item.label===currentMenuDropdownSelected?'checked':''}}"></view>
+            </view>
+          </view>
+        </block>
+        <block wx:else>
+          <!-- 档口和餐别：直接显示选项 -->
+          <view wx:for="{{menuDropdownOptions}}" wx:key="*this"
+                class="dropdown-option {{item===currentMenuDropdownSelected?'active':''}}"
+                data-index="{{index}}"
+                bindtap="onMenuDropdownOptionTap">
+            <text>{{item}}</text>
+            <view class="option-radio {{item===currentMenuDropdownSelected?'checked':''}}"></view>
+          </view>
+        </block>
+      </scroll-view>
+    </view>
+    </view>
+
+    <!-- 最后更新 -->
+    <view class="last-update">
+      最后更新：{{lastUpdate}}
+    </view>
+
+    <!-- 菜单菜品列表 -->
+    <scroll-view class="dish-list" scroll-y="true">
+      <block wx:for="{{menuDishes}}" wx:key="id" wx:if="{{!item.blocked}}">
+        <dish-card dish="{{item}}"
+                   index="{{index}}"
+                   mode="menu"
+                   bind:add="onAddMealFromMenu"
+                   bind:like="onLikeDishFromMenu"
+                   bind:block="onBlockDishFromMenu"
+                   bind:rate="onRateDishFromMenu"
+                   bind:detail="onDishDetailFromMenu" />
+      </block>
+    </scroll-view>
+  </view>
+
+  <!-- 菜品详情弹窗 -->
+  <view wx:if="{{detailModalVisible}}" class="modal-overlay" bindtap="onCloseDetailModal">
+    <view class="modal-content detail-modal-content" catchtap="onModalContentTap">
+      <!-- 弹窗头部 -->
+      <view class="modal-header">
+        <text class="modal-title">菜品详情</text>
+        <text class="modal-close" bindtap="onCloseDetailModal">✕</text>
+      </view>
+      
+      <!-- 弹窗内容 -->
+      <view class="detail-modal-body">
+        <view wx:if="{{detailDish}}" class="detail-dish-info">
+          <view class="detail-top-row">
+            <view class="detail-left">
+              <view class="detail-name">{{detailDish.name}}</view>
+              <view class="detail-location">{{detailDish.location}}</view>
+            </view>
+            <view class="detail-right">
+              <view class="detail-price">¥ {{detailDish.price}}</view>
+            </view>
+          </view>
+          
+          <view class="detail-meta">
+            <view class="detail-nutrition">
+              {{detailDish.kcal}} kcal · 蛋白质 {{detailDish.protein}} g
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</block>
 
 </view>

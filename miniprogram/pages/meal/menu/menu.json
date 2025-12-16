@@ -1,6 +1,0 @@
-{
-  "navigationBarTitleText": "菜品推荐",
-  "usingComponents": {
-    "dish-card": "/components/dish-card/dish-card"
-  }
-}

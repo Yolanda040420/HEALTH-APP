@@ -1,0 +1,173 @@
+<!-- pages/forum/forum/forum.wxml -->
+<view class="page">
+
+<!-- 顶部二级 Tab：论坛 / 资讯 -->
+<view class="sub-tabs">
+  <view class="sub-tab {{activeTab==='forum'?'active':''}}"
+        data-tab="forum"
+        bindtap="onSubTabTap">
+    论坛
+  </view>
+  <view class="sub-tab {{activeTab==='info'?'active':''}}"
+        data-tab="info"
+        bindtap="onSubTabTap">
+    资讯
+  </view>
+</view>
+
+<!-- ================== 论坛 Tab 内容 ================== -->
+<block wx:if="{{activeTab==='forum'}}">
+  <view class="forum-content">
+    <!-- 最新/热门切换 -->
+    <view class="sort-tabs">
+      <view class="sort-icon-wrapper" bindtap="onNotificationTap">
+        <image class="sort-icon" src="/images/forum/notifications.png" mode="aspectFit"></image>
+        <view class="notification-badge" wx:if="{{hasNewNotifications}}"></view>
+      </view>
+      <view class="sort-options-right">
+        <text class="sort-option {{sortType==='latest'?'active':''}}" 
+              data-type="latest"
+              bindtap="onSortTap">最新</text>
+        <text class="sort-divider">|</text>
+        <text class="sort-option {{sortType==='hot'?'active':''}}" 
+              data-type="hot"
+              bindtap="onSortTap">热门</text>
+      </view>
+    </view>
+
+    <!-- 帖子列表 -->
+    <scroll-view class="post-list" scroll-y="true">
+      <block wx:for="{{sortedPosts}}" wx:key="id">
+        <view class="post-card" data-id="{{item.id}}" bindtap="onPostCardTap">
+          <!-- 帖子头部：头像、用户名、时间 -->
+          <view class="post-header">
+            <view class="post-header-left">
+              <image class="post-avatar" src="{{item.avatar}}" mode="aspectFill"></image>
+              <view class="post-author-info">
+                <text class="post-author">{{item.author}}</text>
+                <text class="post-time">{{item.time}}</text>
+              </view>
+            </view>
+            <view class="post-delete-btn" wx:if="{{item.isMine}}" data-id="{{item.id}}" catchtap="onDeletePost">删除</view>
+          </view>
+          
+          <!-- 帖子内容 -->
+          <view class="post-body">
+            <view class="post-content">
+              <text class="post-text">{{item.content}}</text>
+              <text class="post-full-text" wx:if="{{item.showFullText}}" data-id="{{item.id}}" catchtap="onViewFullPost">全文</text>
+            </view>
+            
+            <!-- 图片区域：最多显示3张 -->
+            <view class="post-images" wx:if="{{item.images && item.images.length > 0}}">
+              <block wx:for="{{item.images}}" wx:key="*this" wx:for-item="img" wx:for-index="imgIdx">
+                <view wx:if="{{imgIdx < 3}}" class="post-image-item {{imgIdx === 2 && item.images.length > 3 ? 'has-more' : ''}}">
+                  <image src="{{img}}" mode="aspectFill"></image>
+                  <view wx:if="{{imgIdx === 2 && item.images.length > 3}}" class="image-more-overlay">
+                    <text class="image-more-text">+{{item.images.length - 3}}</text>
+                  </view>
+                </view>
+              </block>
+            </view>
+          </view>
+          
+          <!-- 帖子底部：统计数据 -->
+          <view class="post-footer">
+            <view class="post-stats-left">
+              <view class="stat-item">
+                <image class="stat-icon" src="/images/forum/heat.png" mode="aspectFit"></image>
+                <text class="stat-value">{{item.hot}}</text>
+              </view>
+            </view>
+            <view class="post-stats-right">
+              <view class="stat-item" data-id="{{item.id}}" catchtap="onLikeTap">
+                <image class="stat-icon" src="/images/forum/{{item.liked ? 'thumbup-active' : 'thumbup'}}.png" mode="aspectFit"></image>
+                <text class="stat-value">{{item.likes}}</text>
+              </view>
+              <view class="stat-item" data-id="{{item.id}}" catchtap="onCommentTap">
+                <image class="stat-icon" src="/images/forum/comment.png" mode="aspectFit"></image>
+                <text class="stat-value">{{item.comments}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </block>
+    </scroll-view>
+
+    <!-- 悬浮发布按钮 -->
+    <view class="float-publish-btn" bindtap="onPublish">
+      <text class="publish-icon">+</text>
+    </view>
+  </view>
+</block>
+
+<!-- ================== 资讯 Tab 内容 ================== -->
+<block wx:elif="{{activeTab==='info'}}">
+  <view class="info-content">
+    <!-- 资讯文章列表 -->
+    <scroll-view class="article-list" scroll-y="true">
+      <block wx:for="{{articles}}" wx:key="id">
+        <view class="article-card">
+          <view class="article-card-top" data-id="{{item.id}}" bindtap="onArticleCardTap">
+            <view class="article-header">
+              <text class="article-title">{{item.title}}</text>
+            </view>
+            <view class="article-body">
+              <text class="article-snippet">{{item.snippet}}</text>
+              <view class="article-images" wx:if="{{item.images && item.images.length > 0}}">
+                <block wx:for="{{item.images}}" wx:key="*this" wx:for-item="img" wx:for-index="imgIdx">
+                  <view wx:if="{{imgIdx < 3}}" class="article-image">
+                    <image src="{{img}}" mode="aspectFill"></image>
+                    <view wx:if="{{imgIdx === 2 && item.images.length > 3}}" class="image-more">+{{item.images.length - 3}}</view>
+                  </view>
+                </block>
+              </view>
+            </view>
+          </view>
+          <view class="article-footer">
+            <view class="article-meta">
+              <image class="meta-icon" src="/images/foruminfo/photos.png" mode="aspectFit"></image>
+              <text class="meta-value">{{item.imageCount}}</text>
+              <image class="meta-icon" src="/images/foruminfo/time.png" mode="aspectFit"></image>
+              <text class="meta-value">{{item.time}}</text>
+            </view>
+            <view class="article-comments" data-id="{{item.id}}" catchtap="onArticleCommentTap">
+              <image class="meta-icon" src="/images/foruminfo/comment.png" mode="aspectFit"></image>
+              <text class="meta-value">{{item.comments}}</text>
+            </view>
+          </view>
+        </view>
+      </block>
+    </scroll-view>
+  </view>
+</block>
+
+<!-- 消息提醒弹窗 -->
+<view wx:if="{{notificationVisible}}" class="modal-overlay" bindtap="onCloseNotification">
+  <view class="modal-content notification-modal" catchtap="onModalContentTap">
+    <view class="modal-header">
+      <text class="modal-title">消息提醒</text>
+      <text class="modal-close" bindtap="onCloseNotification">✕</text>
+    </view>
+    <scroll-view class="modal-body" scroll-y="true">
+      <block wx:if="{{notifications.length === 0}}">
+        <view class="empty-notification">
+          <text>暂无消息</text>
+        </view>
+      </block>
+      <block wx:else>
+        <block wx:for="{{notifications}}" wx:key="id">
+          <view class="notification-item {{item.read ? '' : 'unread'}}" data-id="{{item.id}}" data-post-id="{{item.postId}}" bindtap="onNotificationItemTap">
+            <view class="notification-content">
+              <text class="notification-text">{{item.content}}</text>
+              <text class="notification-time">{{item.time}}</text>
+            </view>
+            <view class="notification-badge-small" wx:if="{{!item.read}}"></view>
+          </view>
+        </block>
+      </block>
+    </scroll-view>
+  </view>
+</view>
+
+</view>

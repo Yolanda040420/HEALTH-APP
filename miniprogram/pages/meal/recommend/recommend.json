@@ -1,5 +1,7 @@
 {
   "navigationBarTitleText": "菜品推荐",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
   "usingComponents": {
     "dish-card": "/components/dish-card/dish-card"
   }

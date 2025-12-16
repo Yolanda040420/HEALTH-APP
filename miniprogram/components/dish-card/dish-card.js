@@ -1,4 +1,9 @@
+// components/dish-card/dish-card.js
 Component({
+  options: {
+    addGlobalClass: true
+  },
+  
   properties: {
     dish: {
       type: Object,
@@ -8,48 +13,28 @@ Component({
       type: Number,
       value: 0
     },
-    // recommend / menu
     mode: {
       type: String,
-      value: 'recommend'
+      value: 'recommend' // 'recommend' | 'menu'
     }
-  },
-
-  data: {
-    stars: [1, 2, 3, 4, 5]
   },
 
   methods: {
     onAddTap() {
-      this.triggerEvent('add', {
-        index: this.data.index
-      });
+      this.triggerEvent('add', { index: this.data.index });
     },
-
     onLikeTap() {
-      this.triggerEvent('like', {
-        index: this.data.index
-      });
+      this.triggerEvent('like', { index: this.data.index });
     },
-
     onBlockTap() {
-      this.triggerEvent('block', {
-        index: this.data.index
-      });
+      this.triggerEvent('block', { index: this.data.index });
     },
-
-    onRateTap(e) {
+    onStarTap(e) {
       const score = e.currentTarget.dataset.score;
-      this.triggerEvent('rate', {
-        index: this.data.index,
-        score
-      });
+      this.triggerEvent('rate', { index: this.data.index, score });
     },
-
     onDetailTap() {
-      this.triggerEvent('detail', {
-        index: this.data.index
-      });
+      this.triggerEvent('detail', { index: this.data.index });
     }
   }
 });
