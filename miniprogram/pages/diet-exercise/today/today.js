@@ -1,4 +1,6 @@
 // pages/diet-exercise/today/today.js
+const dataSync = require('../../../utils/dataSync.js');
+
 Page({
   data: {
     // 顶部今日 / 历史
@@ -249,7 +251,14 @@ Page({
     const intake = meals.reduce((sum, m) => sum + m.kcal, 0);
     
     this.setData({ meals, intake });
+    
+    // 保存今日数据
+    this.saveTodayData();
+    
     this.calculateEnergyBalance();
+    
+    // 同步到我的页面
+    dataSync.syncFromTodayToMine();
     
     wx.showToast({
       title: '已清空',
@@ -309,12 +318,53 @@ Page({
     });
   },
 
+  // 验证是否为汉字
+  isChinese(str) {
+    if (!str || str.trim() === '') return false;
+    const chineseRegex = /^[\u4e00-\u9fa5]+$/;
+    return chineseRegex.test(str.trim());
+  },
+
+  // 验证是否为时间格式（例如：30分钟、1小时、1小时30分钟等）
+  isTimeFormat(str) {
+    if (!str || str.trim() === '') return false;
+    const timeRegex = /^(\d+[小时时](\d+[分钟分])?|\d+[分钟分])$/;
+    return timeRegex.test(str.trim());
+  },
+
+  // 验证是否为数字
+  isNumber(str) {
+    if (!str || str.trim() === '') return false;
+    const num = parseFloat(str.trim());
+    return !isNaN(num) && isFinite(num) && num >= 0;
+  },
+
   // 提交表单
   onSubmitFood() {
     const { foodForm, editingMealId, meals } = this.data;
+    
+    // 验证必填项
     if (!foodForm.foodName || !foodForm.kcal) {
       wx.showToast({
         title: '请填写完整信息',
+        icon: 'none'
+      });
+      return;
+    }
+
+    // 验证食物名称必须是汉字
+    if (!this.isChinese(foodForm.foodName)) {
+      wx.showToast({
+        title: '食物名称必须是汉字',
+        icon: 'none'
+      });
+      return;
+    }
+
+    // 验证热量必须是数字
+    if (!this.isNumber(foodForm.kcal)) {
+      wx.showToast({
+        title: '热量必须是数字',
         icon: 'none'
       });
       return;
@@ -367,7 +417,13 @@ Page({
       editingMealId: null
     });
     
+    // 保存今日数据
+    this.saveTodayData();
+    
     this.calculateEnergyBalance();
+    
+    // 同步到我的页面
+    dataSync.syncFromTodayToMine();
     
     wx.showToast({
       title: editingMealId ? '已更新' : '已添加',
@@ -401,7 +457,14 @@ Page({
     const burned = exercises.reduce((sum, ex) => sum + ex.kcal, 0);
     
     this.setData({ exercises, burned });
+    
+    // 保存今日数据
+    this.saveTodayData();
+    
     this.calculateEnergyBalance();
+    
+    // 同步到我的页面
+    dataSync.syncFromTodayToMine();
     
     wx.showToast({
       title: '已删除',
@@ -411,9 +474,38 @@ Page({
 
   onSubmitExercise() {
     const { exerciseForm, burned, exercises, editingExerciseId } = this.data;
-    if (!exerciseForm.exerciseName || !exerciseForm.kcal) {
+    
+    // 验证必填项
+    if (!exerciseForm.exerciseName || !exerciseForm.duration || !exerciseForm.kcal) {
       wx.showToast({
         title: '请填写完整信息',
+        icon: 'none'
+      });
+      return;
+    }
+
+    // 验证运动名称必须是汉字
+    if (!this.isChinese(exerciseForm.exerciseName)) {
+      wx.showToast({
+        title: '运动名称必须是汉字',
+        icon: 'none'
+      });
+      return;
+    }
+
+    // 验证时长必须是数字
+    if (!this.isNumber(exerciseForm.duration)) {
+      wx.showToast({
+        title: '时长必须是数字',
+        icon: 'none'
+      });
+      return;
+    }
+
+    // 验证热量必须是数字
+    if (!this.isNumber(exerciseForm.kcal)) {
+      wx.showToast({
+        title: '消耗热量必须是数字',
         icon: 'none'
       });
       return;
@@ -430,10 +522,11 @@ Page({
       
       newExercises = newExercises.map(ex => {
         if (ex.id === editingExerciseId) {
+          const durationMinutes = parseInt(exerciseForm.duration) || 0;
           return {
             ...ex,
             name: exerciseForm.exerciseName,
-            duration: exerciseForm.duration,
+            duration: `${durationMinutes}分钟`,
             kcal: kcal,
             isEmpty: false
           };
@@ -445,10 +538,11 @@ Page({
     } else {
       // 添加模式：直接添加新记录到数组
       const newId = Math.max(...newExercises.map(ex => ex.id), 0) + 1;
+      const durationMinutes = parseInt(exerciseForm.duration) || 0;
       newExercises.push({
         id: newId,
         name: exerciseForm.exerciseName,
-        duration: exerciseForm.duration,
+        duration: `${durationMinutes}分钟`,
         kcal: kcal,
         isEmpty: false
       });
@@ -463,7 +557,13 @@ Page({
       editingExerciseId: null
     });
     
+    // 保存今日数据
+    this.saveTodayData();
+    
     this.calculateEnergyBalance();
+    
+    // 同步到我的页面
+    dataSync.syncFromTodayToMine();
     
     wx.showToast({
       title: editingExerciseId ? '已更新' : '已添加',
@@ -725,10 +825,78 @@ Page({
     return weekdays[d.getDay()];
   },
 
+  // 加载今日数据
+  loadTodayData() {
+    try {
+      const currentAccount = wx.getStorageSync('currentAccount');
+      const accountKey = currentAccount ? `account_${currentAccount}_todayData` : 'todayData';
+      const todayData = wx.getStorageSync(accountKey);
+      if (todayData) {
+        this.setData({
+          intake: todayData.intake || 0,
+          burned: todayData.burned || 0,
+          net: todayData.net || 0,
+          meals: todayData.meals || this.data.meals,
+          exercises: todayData.exercises || this.data.exercises
+        });
+      }
+      
+      // 加载用户信息
+      const userDataKey = currentAccount ? `account_${currentAccount}_userData` : 'userData';
+      const userData = wx.getStorageSync(userDataKey);
+      if (userData) {
+        this.setData({
+          'userInfo.sex': userData.gender === '男' ? 'male' : 'female',
+          'userInfo.weight': userData.weight || 70,
+          'userInfo.height': userData.height || 175,
+          'userInfo.age': userData.age || 25
+        });
+      }
+    } catch (e) {
+      console.error('加载今日数据失败', e);
+    }
+  },
+
+  // 保存今日数据
+  saveTodayData() {
+    try {
+      const currentAccount = wx.getStorageSync('currentAccount');
+      const accountKey = currentAccount ? `account_${currentAccount}_todayData` : 'todayData';
+      const todayData = {
+        intake: this.data.intake,
+        burned: this.data.burned,
+        net: this.data.net,
+        meals: this.data.meals,
+        exercises: this.data.exercises
+      };
+      wx.setStorageSync(accountKey, todayData);
+      
+      // 同步到我的页面
+      if (currentAccount) {
+        dataSync.syncFromTodayToMine();
+      }
+    } catch (e) {
+      console.error('保存今日数据失败', e);
+    }
+  },
+
   onLoad() {
+    // 加载数据（无论是否登录都可以加载）
+    this.loadTodayData();
     this.calculateEnergyBalance();
     this.initHistoryData();
     // 初始化后加载所有历史记录
     this.loadAllHistoryRecords();
+  },
+
+  onShow() {
+    // 页面显示时重新加载数据，确保数据同步
+    this.loadTodayData();
+    // 同步用户信息（如果我的页面修改了，且已登录）
+    const currentAccount = wx.getStorageSync('currentAccount');
+    if (currentAccount) {
+      dataSync.syncUserInfoToToday();
+    }
+    this.calculateEnergyBalance();
   }
 });

@@ -86,11 +86,11 @@
 
   <!-- 左侧悬浮按钮 -->
   <view class="float-btn like" bindtap="onOpenFavorites">
-    <text class="iconfont float-icon icon-like"></text>
+    <image class="float-icon-img" src="/images/recommend/like.png" mode="aspectFit"></image>
   </view>
 
   <view class="float-btn block" bindtap="onOpenBlockList">
-    <text class="iconfont float-icon icon-stop"></text>
+    <image class="float-icon-img" src="/images/recommend/block.png" mode="aspectFit"></image>
   </view>
 
   <!-- 收藏/黑名单弹窗 -->

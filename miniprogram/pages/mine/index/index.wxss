@@ -20,8 +20,10 @@
   height: 120rpx;
   border-radius: 50%;
   overflow: hidden;
+  margin-left: 24rpx;
   margin-right: 24rpx;
   background-color: #e0e0e0;
+  border: 5rpx solid #fff;
 }
 
 .profile-avatar image {
@@ -70,6 +72,7 @@
   padding: 20rpx 0;
   border-bottom: 1rpx solid #f0f0f0;
 }
+
 
 .info-item:last-child {
   border-bottom: none;
@@ -142,26 +145,29 @@
   background-color: #ffffff;
   gap: 12rpx;
   border: 1rpx solid #f0f0f0;
+  margin-top: 16rpx;
+}
+
+.goal-item image {
+  display: block;
 }
 
 .goal-item.active {
-  background-color: #e6f0dd;
-  border-color: #e6f0dd;
+  background-color: #d5ddc8;
+  border-color: #d5ddc8;
 }
 
 .goal-icon {
-  width: 48rpx;
-  height: 48rpx;
+  width: 40rpx;
+  height: 40rpx;
+  flex-shrink: 0;
+  object-fit: contain;
 }
 
 .goal-text {
   font-size: 26rpx;
   color: #333;
   font-weight: 500;
-}
-
-.goal-item.active .goal-text {
-  color: #567722;
 }
 
 /* 能量平衡卡片 */
@@ -199,8 +205,8 @@
   bottom: -18rpx;
   border-radius: 50%;
   border: 18rpx solid transparent;
-  border-top-color: #8fbf55;
-  border-right-color: #8fbf55;
+  border-top-color: #567722;
+  border-right-color: #567722;
   transform-origin: center;
 }
 
@@ -227,7 +233,7 @@
   margin-top: 8rpx;
   font-size: 40rpx;
   font-weight: 600;
-  color: #8fbf55;
+  color: #567722;
   line-height: 1;
 }
 
@@ -248,7 +254,7 @@
   width: 44rpx;
   height: 44rpx;
   border-radius: 50%;
-  background-color: #8fbf55;
+  background-color: #567722;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -304,13 +310,15 @@
 }
 
 .intake-current {
-  font-size: 26rpx;
+  margin-top: -20rpx;
+  font-size: 28rpx;
   color: #333;
   font-weight: 600;
 }
 
 .intake-target {
-  font-size: 24rpx;
+  margin-top: -24rpx;
+  font-size: 28rpx;
   color: #999;
 }
 
@@ -319,17 +327,17 @@
 }
 
 .intake-bar-bg {
-  height: 12rpx;
+  height: 28rpx;
   background-color: #f0f0f0;
-  border-radius: 6rpx;
+  border-radius: 28rpx;
   overflow: hidden;
   margin-bottom: 8rpx;
 }
 
 .intake-bar-fill {
   height: 100%;
-  background-color: #8fbf55;
-  border-radius: 6rpx;
+  background-color: #567722;
+  border-radius: 28rpx;
   transition: width 0.3s;
 }
 
@@ -339,6 +347,7 @@
 }
 
 .intake-label {
+  margin-top: 8rpx;
   font-size: 22rpx;
   color: #999;
 }
@@ -418,7 +427,7 @@
 .edit-btn {
   margin: 24rpx;
   padding: 32rpx;
-  background-color: #e6f0dd;
+  background-color: #aabb90;
   border-radius: 16rpx;
   display: flex;
   align-items: center;
@@ -433,6 +442,6 @@
 
 .edit-text {
   font-size: 28rpx;
-  color: #567722;
-  font-weight: 500;
+  color: #fff;
+  font-weight: 550;
 }

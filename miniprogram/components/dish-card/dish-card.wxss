@@ -119,33 +119,22 @@
   flex-wrap: nowrap;        /* 强制不换行 */
 }
 
-/* iconfont 图标的公共样式 */
-.base-icon {
-  font-size: 26rpx;      /* 图标大小 */
-  color: #b0b0b0;        /* 默认灰色 */
+/* PNG 图标的公共样式 */
+.action-icon {
   margin-right: 12rpx;
-  line-height: 1;
+  flex-shrink: 0;
 }
 
 /* 收藏图标大小 */
-.icon-like,
-.icon-like_fill {
-  font-size: 26rpx !important;
+.like-icon {
+  width: 26rpx;
+  height: 26rpx;
 }
 
 /* 黑名单图标大小 */
-.icon-stop {
-  font-size: 22rpx !important;
-}
-
-/* 收藏激活时（用 fill 图标 + 高亮颜色）*/
-.base-icon.active {
-  color: #5b7b3a;
-}
-
-/* 黑名单图标 */
-.block-icon.blocked {
-  color: #5b7b3a; 
+.block-icon {
+  width: 22rpx;
+  height: 22rpx;
 }
 
 /* 星级部分 */
@@ -156,27 +145,11 @@
   flex-wrap: nowrap;
 }
 
-.star {
-  font-size: 26rpx;
+.star-icon {
+  width: 26rpx;
+  height: 26rpx;
   margin-left: 4rpx;
-  color: #d0d0d0;
-  line-height: 1;
-}
-
-/* 未选中星星颜色 */
-.star.icon-collection {
-  color: #d0d0d0;      /* 灰色 */
-}
-
-/* 选中星星颜色（绿色） */
-.star.icon-collection_fill {
-  color: #5b7b3a !important;
-}
-
-.actions .iconfont {
-  height: 26rpx;           /* 图标框高度 */
-  display: flex;
-  align-items: center;     /* 垂直居中 */
-  justify-content: center; /* 水平居中 */
-  line-height: 1;          /* 去除字体本身行高 */
+  flex-shrink: 0;
+  display: block;
+  object-fit: contain;
 }

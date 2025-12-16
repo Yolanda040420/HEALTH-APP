@@ -30,25 +30,31 @@
   <view class="add-text" bindtap="onAddTap">加入饮食</view>
 
   <view class="actions">
-    <!-- 收藏：未收藏 icon-collection，已收藏 icon-collection_fill -->
-    <text
-      class="iconfont base-icon {{dish.collected ? 'icon-like_fill active' : 'icon-like'}}"
+    <!-- 收藏：未收藏/已收藏 -->
+    <image
+      class="action-icon like-icon"
+      src="/images/recommend/{{dish.collected ? 'like-active' : 'like'}}.png"
+      mode="aspectFit"
       bindtap="onLikeTap">
-    </text>
+    </image>
 
-    <!-- 黑名单：icon-stop，点击后只改变颜色 -->
-    <text
-      class="iconfont base-icon block-icon {{dish.blocked ? 'blocked' : ''}} icon-stop"
+    <!-- 黑名单 -->
+    <image
+      class="action-icon block-icon"
+      src="/images/recommend/{{dish.blocked ? 'block-active' : 'block'}}.png"
+      mode="aspectFit"
       bindtap="onBlockTap">
-    </text>
+    </image>
 
-    <!-- 星级评分：先用文字星星，后面可以换成 iconfont 星星 -->
+    <!-- 星级评分 -->
     <view class="stars">
-      <text wx:for="{{[1,2,3,4,5]}}" wx:key="*this"
-            class="star iconfont {{item <= dish.rating ? 'icon-collection_fill' : 'icon-collection'}}"
+      <image wx:for="{{[1,2,3,4,5]}}" wx:key="*this"
+            class="star-icon"
+            src="/images/recommend/{{item <= dish.rating ? 'rating-active' : 'rating'}}.png"
+            mode="aspectFit"
             data-score="{{item}}"
             bindtap="onStarTap">
-      </text>
+      </image>
     </view>
   </view>
 </view>
@@ -78,24 +84,30 @@
 <view class="bottom-row menu-bottom">
   <view class="actions">
     <!-- 菜单模式下的收藏 -->
-    <text
-      class="iconfont base-icon {{dish.collected ? 'icon-like_fill active' : 'icon-like'}}"
+    <image
+      class="action-icon like-icon"
+      src="/images/recommend/{{dish.collected ? 'like-active' : 'like'}}.png"
+      mode="aspectFit"
       bindtap="onLikeTap">
-    </text>
+    </image>
 
     <!-- 菜单模式下的黑名单 -->
-    <text
-      class="iconfont base-icon block-icon {{dish.blocked ? 'blocked' : ''}} icon-stop"
+    <image
+      class="action-icon block-icon"
+      src="/images/recommend/{{dish.blocked ? 'block-active' : 'block'}}.png"
+      mode="aspectFit"
       bindtap="onBlockTap">
-    </text>
+    </image>
 
     <!-- 星级评分 -->
     <view class="stars">
-      <text wx:for="{{[1,2,3,4,5]}}" wx:key="*this"
-            class="star iconfont {{item <= dish.rating ? 'icon-collection_fill' : 'icon-collection'}}"
+      <image wx:for="{{[1,2,3,4,5]}}" wx:key="*this"
+            class="star-icon"
+            src="/images/recommend/{{item <= dish.rating ? 'rating-active' : 'rating'}}.png"
+            mode="aspectFit"
             data-score="{{item}}"
             bindtap="onStarTap">
-      </text>
+      </image>
     </view>
   </view>
 </view>

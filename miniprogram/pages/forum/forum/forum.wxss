@@ -1,41 +1,12 @@
 /* 页面基础 */
 .page {
   padding: 0;
-  background-color: #ffffff;
+  background-color: #f5f5f5;
   height: 100vh;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-}
-
-/* 顶部标题栏 */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20rpx 24rpx;
-  background-color: #ffffff;
-  border-bottom: 1rpx solid #e5e5e5;
-  flex-shrink: 0;
-}
-
-.header-title {
-  font-size: 36rpx;
-  font-weight: 600;
-  color: #333;
-}
-
-.header-actions {
-  display: flex;
-  gap: 16rpx;
-}
-
-.header-icon {
-  font-size: 44rpx;
-  color: #333;
-  line-height: 1;
-  margin-left: 16rpx;
 }
 
 /* 顶部二级 Tab：论坛 / 资讯 */
@@ -85,29 +56,46 @@
   flex: 1;
   min-height: 0;
   overflow: hidden;
-  background-color: #ffffff;
+  background-color: #f5f5f5;
 }
 
 /* 最新/热门切换 */
 .sort-tabs {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 16rpx 24rpx;
-  background-color: #ffffff;
   border-bottom: 1rpx solid #f0f0f0;
   flex-shrink: 0;
 }
 
-.sort-icon {
-  font-size: 32rpx;
-  line-height: 1;
-  margin-right: 16rpx;
+.sort-icon-wrapper {
+  position: relative;
+  flex-shrink: 0;
 }
 
-.sort-options {
+.sort-icon {
+  width: 32rpx;
+  height: 32rpx;
+  flex-shrink: 0;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -4rpx;
+  right: -4rpx;
+  width: 16rpx;
+  height: 16rpx;
+  background-color: #ff4444;
+  border-radius: 50%;
+  border: 2rpx solid #ffffff;
+}
+
+.sort-options-right {
   display: flex;
   align-items: center;
   gap: 16rpx;
+  margin-left: auto;
 }
 
 .sort-option {
@@ -130,33 +118,73 @@
   flex: 1;
   min-height: 0;
   height: 0;
-  padding: 0 24rpx;
+  padding: 0rpx 24rpx;
   box-sizing: border-box;
-}
-
-.post-card {
-  padding: 24rpx 0;
-  border-bottom: 1rpx solid #f0f0f0;
-}
-
-.post-header {
-  display: flex;
-  align-items: center;
   margin-bottom: 16rpx;
 }
 
-.post-author {
-  font-size: 26rpx;
-  color: #333;
-  font-weight: 500;
+/* 帖子卡片 */
+.post-card {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+.post-delete-btn {
+  font-size: 24rpx;
+  color: #ff4444;
+  padding: 8rpx 16rpx;
+  background-color: #fff5f5;
+  border-radius: 8rpx;
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+
+/* 帖子头部 */
+.post-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+  position: relative;
+}
+
+.post-author-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.post-header-left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.post-avatar {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
   margin-right: 16rpx;
+  background-color: #f0f0f0;
+}
+
+.post-author {
+  font-size: 28rpx;
+  color: #567722;
+  font-weight: 550;
 }
 
 .post-time {
   font-size: 24rpx;
   color: #999;
+  flex-shrink: 0;
 }
 
+/* 帖子内容 */
 .post-body {
   margin-bottom: 16rpx;
 }
@@ -168,82 +196,102 @@
 .post-text {
   font-size: 28rpx;
   color: #333;
-  line-height: 1.6;
+  line-height: 1.8;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+.post-full-text {
+  font-size: 26rpx;
+  color: #567722;
+  margin-left: 8rpx;
+  cursor: pointer;
+}
+
+/* 图片区域：最多显示3张 */
 .post-images {
   display: flex;
   gap: 12rpx;
+  align-items: flex-start;
 }
 
-.post-images-left {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8rpx;
+.post-image-item {
   flex: 1;
-}
-
-.post-image-small {
-  width: calc(50% - 4rpx);
   aspect-ratio: 1;
   border-radius: 8rpx;
   overflow: hidden;
   position: relative;
+  background-color: #f0f0f0;
+  max-width: calc(33.333% - 8rpx);
 }
 
-.post-image-small image {
+.post-image-item image {
   width: 100%;
   height: 100%;
 }
 
-.image-more {
+.post-image-item.has-more {
+  position: relative;
+}
+
+.image-more-overlay {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
-  font-size: 24rpx;
+  z-index: 1;
 }
 
-.post-image-large {
-  width: 200rpx;
-  height: 200rpx;
-  border-radius: 8rpx;
-  overflow: hidden;
-  flex-shrink: 0;
+.image-more-text {
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: 600;
 }
 
-.post-image-large image {
-  width: 100%;
-  height: 100%;
-}
-
+/* 帖子底部 */
 .post-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #f0f0f0;
 }
 
-.post-stats {
+.post-stats-left {
+  display: flex;
+  align-items: center;
+}
+
+.post-stats-right {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.stat-item {
   display: flex;
   align-items: center;
   gap: 8rpx;
+  cursor: pointer;
 }
 
 .stat-icon {
-  font-size: 28rpx;
-  line-height: 1;
+  width: 28rpx;
+  height: 28rpx;
+  flex-shrink: 0;
 }
 
 .stat-value {
   font-size: 24rpx;
   color: #666;
-  margin-right: 16rpx;
 }
 
 /* 悬浮发布按钮 */
@@ -251,8 +299,8 @@
   position: fixed;
   right: 32rpx;
   bottom: 120rpx;
-  width: 100rpx;
-  height: 100rpx;
+  width: 88rpx;
+  height: 88rpx;
   border-radius: 50%;
   background-color: #567722;
   display: flex;
@@ -263,7 +311,7 @@
 }
 
 .publish-icon {
-  font-size: 48rpx;
+  font-size: 64rpx;
   color: #ffffff;
   font-weight: 300;
   line-height: 1;
@@ -276,7 +324,7 @@
   flex: 1;
   min-height: 0;
   overflow: hidden;
-  background-color: #ffffff;
+  background-color: #f5f5f5;
 }
 
 .article-list {
@@ -293,6 +341,10 @@
   padding: 24rpx;
   margin-bottom: 24rpx;
   box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.article-card-top {
+  cursor: pointer;
 }
 
 .article-header {
@@ -350,8 +402,9 @@
 }
 
 .meta-icon {
-  font-size: 24rpx;
-  line-height: 1;
+  width: 24rpx;
+  height: 24rpx;
+  flex-shrink: 0;
 }
 
 .meta-value {
@@ -364,4 +417,155 @@
   display: flex;
   align-items: center;
   gap: 8rpx;
+}
+
+/* 消息提醒弹窗 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.notification-modal {
+  width: 85%;
+  max-width: 700rpx;
+  max-height: 80%;
+  background-color: #ffffff;
+  border-radius: 24rpx;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50rpx);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx 40rpx;
+  border-bottom: 1rpx solid #e5e5e5;
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.modal-close {
+  font-size: 40rpx;
+  color: #999;
+  line-height: 1;
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.modal-close:active {
+  background-color: #f5f5f5;
+}
+
+.modal-body {
+  flex: 1;
+  height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.empty-notification {
+  padding: 100rpx 0;
+  text-align: center;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 24rpx;
+  margin: 20rpx 20rpx 0 20rpx;
+  background-color: #f8f9fa;
+  border-radius: 16rpx;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.notification-item:active {
+  background-color: #e8e9ea;
+}
+
+.notification-item.unread {
+  background-color: #f0f7ff;
+}
+
+.notification-item.unread:active {
+  background-color: #e0e7f0;
+}
+
+.notification-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  min-width: 0;
+}
+
+.notification-text {
+  font-size: 26rpx;
+  color: #333;
+  line-height: 1.6;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.notification-time {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.notification-badge-small {
+  position: absolute;
+  top: 20rpx;
+  right: 20rpx;
+  width: 12rpx;
+  height: 12rpx;
+  background-color: #ff4444;
+  border-radius: 50%;
 }

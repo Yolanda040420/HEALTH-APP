@@ -1,8 +1,12 @@
 {
   "pages": [
+    "pages/login/login",
     "pages/meal/recommend/recommend",
     "pages/diet-exercise/today/today",
     "pages/forum/forum/forum",
+    "pages/forum/detail/detail",
+    "pages/forum/info-detail/info-detail",
+    "pages/forum/publish/publish",
     "pages/forum/info/info",
     "pages/mine/index/index",
     "pages/mine/edit/edit"

@@ -335,6 +335,12 @@
   font-size: 40rpx !important;
 }
 
+.float-icon-img {
+  width: 40rpx;
+  height: 40rpx;
+  filter: brightness(0) invert(1); /* 将图标变为白色 */
+}
+
 /* ===== 弹窗样式 ===== */
 .modal-overlay {
   position: fixed;

@@ -86,7 +86,7 @@
   </view>
   <view class="intake-bar">
     <view class="intake-bar-bg">
-      <view class="intake-bar-fill" style="width: {{intakePercent || 0}}%"></view>
+      <view class="intake-bar-fill" style="width: {{(intakePercent || 0) + '%'}}"></view>
     </view>
     <view class="intake-labels">
       <text class="intake-label">0 kcal</text>

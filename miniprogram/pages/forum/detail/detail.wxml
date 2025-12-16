@@ -1,0 +1,125 @@
+<!-- pages/forum/detail/detail.wxml -->
+<view class="page">
+  <!-- 自定义导航栏 -->
+  <view class="custom-navbar" style="padding-top: {{statusBarHeight}}px;">
+    <view class="navbar-content">
+      <view class="navbar-back" bindtap="onBack">
+        <text class="back-icon">‹</text>
+      </view>
+      <text class="navbar-title">帖子详情</text>
+      <view class="navbar-actions" wx:if="{{isMyPost}}">
+        <text class="navbar-delete" bindtap="onDeletePost">删除</text>
+      </view>
+      <view class="navbar-placeholder" wx:else></view>
+    </view>
+  </view>
+
+  <scroll-view class="content-scroll" scroll-y="true" style="margin-top: {{navbarHeight}}px;">
+    <view class="detail-container">
+      <!-- 帖子头部 -->
+      <view class="post-header">
+        <view class="post-header-left">
+          <image class="post-avatar" src="{{post.avatar}}" mode="aspectFill"></image>
+          <view class="post-author-info">
+            <text class="post-author">{{post.author}}</text>
+            <text class="post-time">{{post.time}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 帖子内容 -->
+      <view class="post-content-full">
+        <text class="post-text-full">{{post.content}}</text>
+      </view>
+
+      <!-- 图片区域：最多显示9张 -->
+      <view class="post-images-full" wx:if="{{post.images && post.images.length > 0}}">
+        <view class="images-grid">
+          <block wx:for="{{post.images}}" wx:key="*this" wx:for-item="img" wx:for-index="imgIdx">
+            <view wx:if="{{imgIdx < 9}}" class="image-item" data-src="{{img}}" bindtap="onImageTap">
+              <image src="{{img}}" mode="aspectFill"></image>
+            </view>
+          </block>
+        </view>
+      </view>
+
+      <!-- 帖子底部：统计数据 -->
+      <view class="post-footer">
+        <view class="post-stats-left">
+          <view class="stat-item">
+            <image class="stat-icon" src="/images/forum/heat.png" mode="aspectFit"></image>
+            <text class="stat-value">{{post.hot}}</text>
+          </view>
+        </view>
+        <view class="post-stats-right">
+          <view class="stat-item" bindtap="onLikeTap">
+            <image class="stat-icon" src="/images/forum/{{post.liked ? 'thumbup-active' : 'thumbup'}}.png" mode="aspectFit"></image>
+            <text class="stat-value">{{post.likes}}</text>
+          </view>
+          <view class="stat-item" bindtap="onCommentInputFocus">
+            <image class="stat-icon" src="/images/forum/comment.png" mode="aspectFit"></image>
+            <text class="stat-value">{{post.comments}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 评论区域 -->
+      <view class="comments-section">
+        <view class="comments-title">评论 ({{comments.length}})</view>
+        <block wx:for="{{comments}}" wx:key="id">
+          <view class="comment-item">
+            <image class="comment-avatar" src="{{item.avatar}}" mode="aspectFill"></image>
+            <view class="comment-content">
+              <view class="comment-header">
+                <text class="comment-author">{{item.author}}</text>
+                <text class="comment-time">{{item.time}}</text>
+              </view>
+              <text class="comment-text">{{item.content}}</text>
+              
+              <!-- 回复列表 -->
+              <view class="replies" wx:if="{{item.replies && item.replies.length > 0}}">
+                <block wx:for="{{item.replies}}" wx:key="id" wx:for-item="reply">
+                  <view class="reply-item">
+                    <text class="reply-author">{{reply.author}}</text>
+                    <text class="reply-text">: {{reply.content}}</text>
+                  </view>
+                </block>
+              </view>
+              
+              <!-- 评论操作 -->
+              <view class="comment-actions">
+                <view class="comment-action-item" data-comment-id="{{item.id}}" bindtap="onCommentLikeTap">
+                  <image class="comment-action-icon" src="/images/forum/{{item.liked ? 'thumbup-active' : 'thumbup'}}.png" mode="aspectFit"></image>
+                  <text class="comment-action-text">{{item.likes || 0}}</text>
+                </view>
+                <view class="comment-action-item" data-comment-id="{{item.id}}" data-author="{{item.author}}" bindtap="onReplyTap">
+                  <image class="comment-action-icon" src="/images/forum/comment.png" mode="aspectFit"></image>
+                  <text class="comment-action-text">回复</text>
+                </view>
+                <view class="comment-action-item delete-action" wx:if="{{item.isMine}}" data-comment-id="{{item.id}}" bindtap="onDeleteComment">
+                  <text class="comment-action-text delete-text">删除</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 评论输入框 -->
+  <view class="comment-input-container">
+    <input class="comment-input" 
+           type="text" 
+           placeholder="{{replyingTo ? '回复 ' + replyingTo + ':' : '写评论...'}}"
+           value="{{commentText}}"
+           bindinput="onCommentInput"
+           bindfocus="onCommentInputFocus"
+           bindblur="onCommentInputBlur"
+           confirm-type="send"
+           bindconfirm="onSubmitComment"/>
+    <button class="comment-submit-btn" 
+            disabled="{{!commentText || commentText.trim() === ''}}"
+            bindtap="onSubmitComment">发送</button>
+  </view>
+</view>

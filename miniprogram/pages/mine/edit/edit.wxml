@@ -11,7 +11,7 @@
     </view>
   </view>
 
-  <scroll-view class="content-scroll" scroll-y="true" style="margin-top: {{navbarHeight}}px;">
+  <scroll-view class="content-scroll" scroll-y="true" style="margin-top: 180rpx;">
     <!-- 个人信息编辑 -->
     <view class="edit-section">
       <view class="section-title">

@@ -391,10 +391,10 @@
         </view>
         
         <view class="form-item">
-          <text class="form-label">时长</text>
+          <text class="form-label">时长（分钟）</text>
           <input class="form-input" 
-                 type="text" 
-                 placeholder="例如：30分钟"
+                 type="number" 
+                 placeholder="请输入分钟数"
                  value="{{exerciseForm.duration}}"
                  bindinput="onExerciseDurationInput"/>
         </view>

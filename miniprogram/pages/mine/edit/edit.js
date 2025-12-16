@@ -129,7 +129,9 @@ Page({
     
     // 保存到本地存储
     try {
-      wx.setStorageSync('userData', {
+      const currentAccount = wx.getStorageSync('currentAccount');
+      const userDataKey = currentAccount ? `account_${currentAccount}_userData` : 'userData';
+      const userData = {
         name: this.data.name,
         gender: this.data.gender,
         age: parseInt(this.data.age),
@@ -137,7 +139,8 @@ Page({
         height: parseFloat(this.data.height),
         targetIntake: parseInt(this.data.targetIntake),
         intakePercent: this.data.intakePercent
-      });
+      };
+      wx.setStorageSync(userDataKey, userData);
     } catch (e) {
       console.error('保存数据失败', e);
     }
