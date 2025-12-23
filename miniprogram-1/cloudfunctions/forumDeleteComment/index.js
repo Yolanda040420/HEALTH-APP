@@ -10,10 +10,7 @@ const postsCollection = db.collection('forum_posts');
 const commentsCollection = db.collection('forum_comments');
 
 exports.main = async (event, context) => {
-  const wxContext = cloud.getWXContext();
-  const { OPENID } = wxContext;
-
-  const { commentId } = event;
+  const { commentId, userId } = event;   
 
   if (!commentId) {
     return {
@@ -22,8 +19,14 @@ exports.main = async (event, context) => {
     };
   }
 
+  if (!userId) {
+    return {
+      code: 401,
+      message: 'userId is required'
+    };
+  }
+
   try {
-    // 1. load comment
     const commentRes = await commentsCollection.doc(commentId).get();
     const comment = commentRes.data;
     if (!comment) {
@@ -33,13 +36,11 @@ exports.main = async (event, context) => {
       };
     }
 
-    // 2. load post (to check post owner)
     const postRes = await postsCollection.doc(comment.postId).get();
     const post = postRes.data;
 
-    // 3. permission check: comment owner OR post owner
-    const isCommentOwner = comment.userId === OPENID;
-    const isPostOwner = post && post.userId === OPENID;
+    const isCommentOwner = comment.userId === userId;
+    const isPostOwner = post && post.userId === userId;
 
     if (!isCommentOwner && !isPostOwner) {
       return {
@@ -48,10 +49,8 @@ exports.main = async (event, context) => {
       };
     }
 
-    // 4. delete comment
     await commentsCollection.doc(commentId).remove();
 
-    // 5. decrease commentCount on post
     if (post) {
       await postsCollection.doc(comment.postId).update({
         data: {
