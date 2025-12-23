@@ -10,10 +10,7 @@ const postsCollection = db.collection('forum_posts');
 const reactionsCollection = db.collection('forum_post_reactions');
 
 exports.main = async (event, context) => {
-  const wxContext = cloud.getWXContext();
-  const { OPENID } = wxContext;
-
-  const { postId, action } = event;
+  const { postId, action, userId } = event;  
 
   if (!postId || !action) {
     return {
@@ -22,7 +19,13 @@ exports.main = async (event, context) => {
     };
   }
 
-  // map action -> type + delta
+  if (!userId) {
+    return {
+      code: 401,
+      message: 'userId is required'
+    };
+  }
+
   let type = '';
   let delta = 0;
   let field = '';
@@ -56,7 +59,6 @@ exports.main = async (event, context) => {
   }
 
   try {
-    // 1. check post exists
     const postRes = await postsCollection.doc(postId).get();
     if (!postRes.data) {
       return {
@@ -67,11 +69,10 @@ exports.main = async (event, context) => {
 
     const now = new Date();
 
-    // 2. check existing reaction record
     const reactionRes = await reactionsCollection
       .where({
         postId,
-        userId: OPENID,
+        userId,
         type
       })
       .limit(1)
@@ -85,7 +86,7 @@ exports.main = async (event, context) => {
         await reactionsCollection.add({
           data: {
             postId,
-            userId: OPENID,
+            userId,
             type, // 'like' | 'fire'
             createdAt: now
           }
@@ -99,7 +100,6 @@ exports.main = async (event, context) => {
         });
       }
     } else {
-      // unlike / unfire
       if (hasReaction) {
         await reactionsCollection.doc(reactionRes.data[0]._id).remove();
 
@@ -112,7 +112,6 @@ exports.main = async (event, context) => {
       }
     }
 
-    // optional: return latest counters
     const updatedPost = await postsCollection.doc(postId).get();
 
     return {
