@@ -10,14 +10,16 @@ const postsCollection = db.collection('forum_posts');
 const commentsCollection = db.collection('forum_comments');
 
 exports.main = async (event, context) => {
-  const wxContext = cloud.getWXContext();
-  const { OPENID } = wxContext;
-
   const {
     postId,
     content,
     images = [],
-    parentId = null  
+    parentId = null,
+
+    userId,
+    username,
+    name,
+    avatar    
   } = event;
 
   if (!postId || !content || !content.trim()) {
@@ -27,8 +29,14 @@ exports.main = async (event, context) => {
     };
   }
 
+  if (!userId || !username) {
+    return {
+      code: 401,
+      message: 'userId and username are required'
+    };
+  }
+
   try {
-    // 1. make sure post exists
     const postRes = await postsCollection.doc(postId).get();
     if (!postRes.data) {
       return {
@@ -39,11 +47,14 @@ exports.main = async (event, context) => {
 
     const now = new Date();
 
-    // 2. add comment
     const addRes = await commentsCollection.add({
       data: {
         postId,
-        userId: OPENID,
+        userId,                    
+        username,
+        name: name || '',
+        avatar: avatar || '',
+
         content: content.trim(),
         images,
         parentId,
@@ -53,7 +64,6 @@ exports.main = async (event, context) => {
       }
     });
 
-    // 3. increase commentCount on post
     await postsCollection.doc(postId).update({
       data: {
         commentCount: _.inc(1),
