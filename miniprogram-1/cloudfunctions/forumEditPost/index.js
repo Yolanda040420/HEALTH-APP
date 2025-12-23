@@ -8,15 +8,13 @@ const db = cloud.database();
 const postsCollection = db.collection('forum_posts');
 
 exports.main = async (event, context) => {
-  const wxContext = cloud.getWXContext();
-  const { OPENID } = wxContext;
-
   const {
     postId,
     title,
     content,
     images,
-    tags
+    tags,
+    userId   
   } = event;
 
   if (!postId) {
@@ -26,8 +24,14 @@ exports.main = async (event, context) => {
     };
   }
 
+  if (!userId) {
+    return {
+      code: 401,
+      message: 'userId is required'
+    };
+  }
+
   try {
-    // 1. Load post
     const postRes = await postsCollection.doc(postId).get();
     const post = postRes.data;
     if (!post) {
@@ -37,15 +41,14 @@ exports.main = async (event, context) => {
       };
     }
 
-    // 2. Permission check: only owner can edit
-    if (post.userId !== OPENID) {
+    if (post.userId !== userId) {
       return {
         code: 403,
         message: 'no permission to edit this post'
       };
     }
 
-    // 3. Build update data (only update provided fields)
+  
     const updateData = {};
     if (title !== undefined) updateData.title = title;
     if (content !== undefined) updateData.content = content;
