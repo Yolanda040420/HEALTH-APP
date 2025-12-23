@@ -8,11 +8,16 @@ const db = cloud.database();
 const posts = db.collection('forum_posts');
 
 exports.main = async (event, context) => {
-  const wxContext = cloud.getWXContext();
-  const openid = wxContext.OPENID;
-
-  // add `images` here
-  const { title, content, tags, images, authorNickname, authorAvatar } = event;
+  const {
+    title,
+    content,
+    tags,
+    images,
+    userId,
+    username,
+    name,
+    authorAvatar   
+  } = event;
 
   if (!title || !content) {
     return {
@@ -21,7 +26,13 @@ exports.main = async (event, context) => {
     };
   }
 
-  // normalize images: must be array of strings (fileIDs)
+  if (!userId || !username) {
+    return {
+      code: 401,
+      message: 'userId and username are required'
+    };
+  }
+
   const imageList = Array.isArray(images)
     ? images.filter(i => typeof i === 'string' && i.trim() !== '')
     : [];
@@ -31,16 +42,19 @@ exports.main = async (event, context) => {
     const res = await posts.add({
       data: {
         title,
-        content,                                   
+        content,
         tags: Array.isArray(tags) ? tags : [],
-        images: imageList,                        
-        authorOpenid: openid,
-        authorNickname: authorNickname || '',
+        images: imageList,
+
+        userId,                  
+        authorUsername: username,
+        authorName: name || '',
         authorAvatar: authorAvatar || '',
+
         createdAt: now,
         updatedAt: now,
         likeCount: 0,
-        fireCount: 0,                              
+        fireCount: 0,
         commentCount: 0
       }
     });
