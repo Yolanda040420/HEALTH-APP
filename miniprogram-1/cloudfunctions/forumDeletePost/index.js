@@ -9,9 +9,7 @@ const postsCollection = db.collection('forum_posts');
 const commentsCollection = db.collection('forum_comments');
 
 exports.main = async (event, context) => {
-  const wxContext = cloud.getWXContext();
-  const { OPENID } = wxContext;
-  const { postId } = event;
+  const { postId, userId } = event;  
 
   if (!postId) {
     return {
@@ -20,8 +18,14 @@ exports.main = async (event, context) => {
     };
   }
 
+  if (!userId) {
+    return {
+      code: 401,
+      message: 'userId is required'
+    };
+  }
+
   try {
-    // 1. Load post
     const postRes = await postsCollection.doc(postId).get();
     const post = postRes.data;
     if (!post) {
@@ -31,18 +35,15 @@ exports.main = async (event, context) => {
       };
     }
 
-    // 2. Permission check: only owner can delete
-    if (post.userId !== OPENID) {
+    if (post.userId !== userId) {
       return {
         code: 403,
         message: 'no permission to delete this post'
       };
     }
 
-    // 3. Delete post
     await postsCollection.doc(postId).remove();
 
-    // 4. Delete its comments
     await commentsCollection.where({ postId }).remove();
 
     return {
