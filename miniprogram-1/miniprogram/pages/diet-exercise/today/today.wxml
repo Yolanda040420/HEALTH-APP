@@ -1,0 +1,456 @@
+<view class="page">
+
+<!-- 顶部二级 Tab：今日 / 历史 -->
+<view class="sub-tabs">
+  <view class="sub-tab {{activeTab==='today'?'active':''}}"
+        data-tab="today"
+        bindtap="onSubTabTap">
+    今日
+  </view>
+  <view class="sub-tab {{activeTab==='history'?'active':''}}"
+        data-tab="history"
+        bindtap="onSubTabTap">
+    历史
+  </view>
+</view>
+
+<!-- ================== 今日 Tab 内容 ================== -->
+<block wx:if="{{activeTab==='today'}}">
+  <view class="today-content">
+    <scroll-view class="today-scroll" scroll-y="true">
+      <view class="content-wrapper">
+        <view class="card summary-card">
+          <view class="summary-left">
+            <view class="circle"
+                  style="background-image: conic-gradient(#a7b78d 0deg {{progressDeg}}deg, #ececec {{progressDeg}}deg 360deg);">
+              <view class="circle-inner">
+                <text class="circle-label">今日能量平衡</text>
+                <text class="circle-percent">{{energyBalance}}%</text>
+              </view>
+            </view>
+          </view>
+          <view class="summary-right">
+            <view class="summary-item">
+              <view class="summary-icon food-icon">
+                <image src="/images/energycard/intake.png" mode="aspectFit"></image>
+              </view>
+              <view class="summary-content">
+                <text class="summary-label">已摄入</text>
+                <text class="summary-value">{{intake}} kcal</text>
+              </view>
+            </view>
+            <view class="summary-item">
+              <view class="summary-icon sport-icon">
+                <image src="/images/energycard/consume.png" mode="aspectFit"></image>
+              </view>
+              <view class="summary-content">
+                <text class="summary-label">已消耗</text>
+                <text class="summary-value">{{burned}} kcal</text>
+              </view>
+            </view>
+            <view class="summary-item">
+              <view class="summary-icon net-icon">
+                <image src="/images/energycard/net-energy.png" mode="aspectFit"></image>
+              </view>
+              <view class="summary-content">
+                <text class="summary-label">净能量</text>
+                <text class="summary-value">{{net}} kcal</text>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view class="section">
+          <view class="section-title">快捷记录</view>
+          <view class="quick-row">
+            <view class="quick-btn" bindtap="onAddFood">
+              <view class="quick-icon">
+                <image src="/images/diet-exercise/add-meal.png" mode="aspectFit"></image>
+              </view>
+              <text class="quick-text">添加饮食</text>
+            </view>
+            <view class="quick-btn" bindtap="onAddExercise">
+              <view class="quick-icon">
+                <image src="/images/diet-exercise/add-sport.png" mode="aspectFit"></image>
+              </view>
+              <text class="quick-text">添加运动</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="section">
+          <view class="section-title">今日饮食</view>
+
+          <!-- 按餐别展开：每条 diet record 单独一行（像今日运动一样） -->
+          <block wx:for="{{meals}}" wx:key="id" wx:for-item="meal">
+            <!-- 没有记录：显示占位行（早餐-无 / 午餐-无 / 晚餐-无） -->
+            <block wx:if="{{!meal.items || meal.items.length === 0}}">
+              <view class="card meal-card">
+                <view class="meal-left">
+                  <view class="meal-icon">
+                    <image src="{{meal.icon}}" mode="aspectFit"></image>
+                  </view>
+                  <view class="meal-info">
+                    <text class="meal-name">{{meal.name}}</text>
+                    <text class="meal-desc">暂无记录</text>
+                  </view>
+                </view>
+                <view class="meal-right">
+                  <text class="meal-kcal" style="color:#999;">0 kcal</text>
+                  <view class="meal-actions">
+                    <text class="meal-action"
+                          bindtap="onEditMeal"
+                          data-id="{{meal.id}}">编辑</text>
+                    <text class="meal-action delete disabled"
+                          bindtap="onDeleteMeal"
+                          data-id="{{meal.id}}">删除</text>
+                  </view>
+                </view>
+              </view>
+            </block>
+
+            <!-- 有记录：每条记录单独一行（第一行：早餐；第二行：面包） -->
+            <block wx:else>
+              <block wx:for="{{meal.items}}" wx:key="_id" wx:for-item="rec">
+                <view class="card meal-card">
+                  <view class="meal-left">
+                    <view class="meal-icon">
+                      <image src="{{meal.icon}}" mode="aspectFit"></image>
+                    </view>
+                    <view class="meal-info">
+                      <!-- 第一行只显示餐别 -->
+                      <text class="meal-name">{{meal.name}}</text>
+                      <!-- 第二行显示食物名（原“暂无记录”位置） -->
+                      <text class="meal-desc">{{rec.foodName}}</text>
+                    </view>
+                  </view>
+
+                  <view class="meal-right">
+                    <text class="meal-kcal">{{rec.kcal}} kcal</text>
+                    <view class="meal-actions">
+                      <text class="meal-action"
+                            bindtap="onEditMeal"
+                            data-id="{{meal.id}}"
+                            data-recordid="{{rec._id}}">编辑</text>
+                      <text class="meal-action delete"
+                            bindtap="onDeleteMeal"
+                            data-id="{{meal.id}}"
+                            data-recordid="{{rec._id}}">删除</text>
+                    </view>
+                  </view>
+                </view>
+              </block>
+            </block>
+          </block>
+        </view>
+
+        <view class="section">
+          <view class="section-title">今日运动</view>
+
+          <block wx:if="{{exercises.length > 0}}">
+            <block wx:for="{{exercises}}" wx:key="id">
+              <view class="card meal-card">
+                <view class="meal-left">
+                  <view class="meal-icon">
+                    <image src="/images/diet-exercise/add-sport.png" mode="aspectFit"></image>
+                  </view>
+                  <view class="meal-info">
+                    <text class="meal-name">{{item.name}}</text>
+                    <text class="meal-desc">{{item.duration}}</text>
+                  </view>
+                </view>
+                <view class="meal-right">
+                  <text class="meal-kcal">{{item.kcal}} kcal</text>
+                  <view class="meal-actions">
+                    <text class="meal-action" 
+                          bindtap="onEditExercise" 
+                          data-id="{{item.id}}">编辑</text>
+                    <text class="meal-action delete" 
+                          bindtap="onDeleteExercise" 
+                          data-id="{{item.id}}">删除</text>
+                  </view>
+                </view>
+              </view>
+            </block>
+          </block>
+          <block wx:else>
+            <view class="card meal-card empty-hint">
+              <view class="empty-hint-text">今天还没有记录哦~快来运动吧！</view>
+            </view>
+          </block>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</block>
+
+<!-- ================== 历史 Tab 内容 ================== -->
+<block wx:elif="{{activeTab==='history'}}">
+  <view class="history-content">
+    <!-- 日期选择行（固定） -->
+    <view class="date-selector-row">
+      <text class="date-selector-label">日期选择</text>
+      
+      <view class="date-selector-right">
+        <!-- 右侧日期选择（picker） -->
+        <picker mode="date"
+                value="{{selectedDate}}"
+                start="2020-01-01"
+                end="{{maxDate}}"
+                bindchange="onDateChange">
+          <view class="date-selector-value">
+            <text class="date-text {{selectedDate ? 'filled' : 'placeholder'}}">{{ selectedDate || '请选择日期' }}</text>
+            <text class="date-arrow">›</text>
+          </view>
+        </picker>
+
+        <!-- 清空按钮：只有 selectedDate 有值才显示 -->
+        <view wx:if="{{selectedDate}}" 
+              class="date-clear-btn" 
+              bindtap="onClearDate">
+          清空
+        </view>
+      </view>
+    </view>
+
+    <!-- 滚动区域 -->
+    <scroll-view class="history-scroll" scroll-y="true">
+      <view class="content-wrapper">
+        <!-- 选择了日期：显示单日记录 -->
+        <block wx:if="{{selectedDate}}">
+          <!-- 日期卡片容器（与未选择日期时样式一致） -->
+          <view class="date-group-card">
+            <!-- 日期分组头部 -->
+            <view class="date-group-header">
+              <text class="date-group-text">{{selectedDate}} {{selectedWeekday}}</text>
+            </view>
+
+            <!-- 日期卡片内容区域 -->
+            <view class="date-group-content">
+              <!-- 统计卡片 -->
+              <view class="stats-cards">
+                <view class="stat-card">
+                  <text class="stat-label">总摄入</text>
+                  <text class="stat-value">{{historyData.totalIntake}} kcal</text>
+                </view>
+                <view class="stat-card">
+                  <text class="stat-label">总消耗</text>
+                  <text class="stat-value">{{historyData.totalBurned}} kcal</text>
+                </view>
+                <view class="stat-card">
+                  <text class="stat-label">净能量</text>
+                  <text class="stat-value">{{historyData.netEnergy}} kcal</text>
+                </view>
+              </view>
+
+              <!-- 饮食记录 -->
+              <view class="record-section" wx:if="{{historyData.dietRecords && historyData.dietRecords.length > 0}}">
+                <view class="record-section-header">
+                  <image class="record-icon" src="/images/diet-exercise/add-meal.png" mode="aspectFit"></image>
+                  <text class="record-title">饮食记录</text>
+                </view>
+                <view class="record-list">
+                  <view class="record-table">
+                    <block wx:for="{{historyData.dietRecords}}" wx:key="id">
+                      <view class="record-row">
+                        <view class="record-cell record-name">{{item.name}}</view>
+                        <view class="record-cell record-quantity">{{item.quantity}}</view>
+                        <view class="record-cell record-kcal">{{item.kcal}} kcal</view>
+                      </view>
+                    </block>
+                  </view>
+                </view>
+              </view>
+
+              <!-- 运动记录 -->
+              <view class="record-section" wx:if="{{historyData.exerciseRecords && historyData.exerciseRecords.length > 0}}">
+                <view class="record-section-header">
+                  <image class="record-icon" src="/images/diet-exercise/add-sport.png" mode="aspectFit"></image>
+                  <text class="record-title">运动记录</text>
+                </view>
+                <view class="record-list">
+                  <view class="record-table">
+                    <block wx:for="{{historyData.exerciseRecords}}" wx:key="id">
+                      <view class="record-row">
+                        <view class="record-cell record-name">{{item.name}}</view>
+                        <view class="record-cell record-quantity">{{item.duration}}</view>
+                        <view class="record-cell record-kcal">{{item.kcal}} kcal</view>
+                      </view>
+                    </block>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </block>
+
+          <!-- 未选择日期：显示所有历史记录（按日期分组） -->
+          <block wx:else>
+            <block wx:for="{{allHistoryRecords}}" wx:key="date" wx:for-item="dateGroup" wx:for-index="dateIndex">
+              <!-- 日期卡片容器 -->
+              <view class="date-group-card">
+                <!-- 日期分组头部（可点击收起/展开） -->
+                <view class="date-group-header" bindtap="onDateGroupHeaderTap" data-date="{{dateGroup.date}}">
+                  <text class="date-group-text">{{dateGroup.date}} {{dateGroup.weekday}}</text>
+                  <text class="date-group-arrow {{dateGroupCollapsed[dateGroup.date] ? 'collapsed' : ''}}">▾</text>
+                </view>
+
+                <!-- 日期卡片内容区域（可收起/展开） -->
+                <view class="date-group-content {{dateGroupCollapsed[dateGroup.date] ? 'collapsed' : ''}}">
+                  <!-- 统计卡片 -->
+                  <view class="stats-cards">
+                    <view class="stat-card">
+                      <text class="stat-label">总摄入</text>
+                      <text class="stat-value">{{dateGroup.totalIntake}} kcal</text>
+                    </view>
+                    <view class="stat-card">
+                      <text class="stat-label">总消耗</text>
+                      <text class="stat-value">{{dateGroup.totalBurned}} kcal</text>
+                    </view>
+                    <view class="stat-card">
+                      <text class="stat-label">净能量</text>
+                      <text class="stat-value">{{dateGroup.netEnergy}} kcal</text>
+                    </view>
+                  </view>
+
+                  <!-- 饮食记录 -->
+                  <view class="record-section" wx:if="{{dateGroup.dietRecords && dateGroup.dietRecords.length > 0}}">
+                    <view class="record-section-header">
+                      <image class="record-icon" src="/images/diet-exercise/add-meal.png" mode="aspectFit"></image>
+                      <text class="record-title">饮食记录</text>
+                    </view>
+                    <view class="record-list">
+                      <view class="record-table">
+                        <block wx:for="{{dateGroup.dietRecords}}" wx:key="id" wx:for-item="item">
+                          <view class="record-row">
+                            <view class="record-cell record-name">{{item.name}}</view>
+                            <view class="record-cell record-quantity">{{item.quantity}}</view>
+                            <view class="record-cell record-kcal">{{item.kcal}} kcal</view>
+                          </view>
+                        </block>
+                      </view>
+                    </view>
+                  </view>
+
+                  <!-- 运动记录 -->
+                  <view class="record-section" wx:if="{{dateGroup.exerciseRecords && dateGroup.exerciseRecords.length > 0}}">
+                    <view class="record-section-header">
+                      <image class="record-icon" src="/images/diet-exercise/add-sport.png" mode="aspectFit"></image>
+                      <text class="record-title">运动记录</text>
+                    </view>
+                    <view class="record-list">
+                      <view class="record-table">
+                        <block wx:for="{{dateGroup.exerciseRecords}}" wx:key="id" wx:for-item="item">
+                          <view class="record-row">
+                            <view class="record-cell record-name">{{item.name}}</view>
+                            <view class="record-cell record-quantity">{{item.duration}}</view>
+                            <view class="record-cell record-kcal">{{item.kcal}} kcal</view>
+                          </view>
+                        </block>
+                      </view>
+                    </view>
+                  </view>
+                </view>
+              </view>
+            </block>
+          </block>
+        </view>
+      </scroll-view>
+    </view>
+</block>
+
+<!-- 弹窗 -->
+<view wx:if="{{modalVisible}}" class="modal-overlay" bindtap="onCloseModal">
+  <view class="modal-content" catchtap="onModalContentTap">
+    <!-- 弹窗头部 -->
+    <view class="modal-header">
+        <text class="modal-title">
+          <block wx:if="{{modalType==='addFood'}}">添加饮食</block>
+          <block wx:elif="{{modalType==='addExercise'}}">添加运动</block>
+          <block wx:elif="{{modalType==='editMeal'}}">编辑饮食</block>
+          <block wx:elif="{{modalType==='editExercise'}}">编辑运动</block>
+        </text>
+      <text class="modal-close" bindtap="onCloseModal">✕</text>
+    </view>
+    
+    <!-- 添加饮食表单 -->
+    <block wx:if="{{modalType==='addFood' || modalType==='editMeal'}}">
+      <view class="modal-body">
+        <view class="form-item">
+          <text class="form-label">餐别</text>
+          <picker mode="selector" 
+                  range="{{['早餐', '午餐', '晚餐']}}" 
+                  value="{{foodForm.mealType === 'breakfast' ? 0 : foodForm.mealType === 'lunch' ? 1 : 2}}"
+                  bindchange="onMealTypeChange">
+            <view class="form-picker">
+              <text>{{foodForm.mealType === 'breakfast' ? '早餐' : foodForm.mealType === 'lunch' ? '午餐' : '晚餐'}}</text>
+              <text class="picker-arrow">▾</text>
+            </view>
+          </picker>
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">食物名称</text>
+          <input class="form-input" 
+                 type="text" 
+                 placeholder="请输入食物名称"
+                 value="{{foodForm.foodName}}"
+                 bindinput="onFoodNameInput"/>
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">热量 (kcal)</text>
+          <input class="form-input" 
+                 type="number" 
+                 placeholder="请输入热量"
+                 value="{{foodForm.kcal}}"
+                 bindinput="onKcalInput"/>
+        </view>
+        
+        <view class="form-buttons">
+          <button class="form-btn cancel" bindtap="onCloseModal">取消</button>
+          <button class="form-btn submit" bindtap="onSubmitFood">确定</button>
+        </view>
+      </view>
+    </block>
+    
+    <!-- 添加/编辑运动表单 -->
+    <block wx:if="{{modalType==='addExercise' || modalType==='editExercise'}}">
+      <view class="modal-body">
+        <view class="form-item">
+          <text class="form-label">运动名称</text>
+          <input class="form-input" 
+                 type="text" 
+                 placeholder="请输入运动名称"
+                 value="{{exerciseForm.exerciseName}}"
+                 bindinput="onExerciseNameInput"/>
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">时长（分钟）</text>
+          <input class="form-input" 
+                 type="number" 
+                 placeholder="请输入分钟数"
+                 value="{{exerciseForm.duration}}"
+                 bindinput="onExerciseDurationInput"/>
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">消耗热量 (kcal)</text>
+          <input class="form-input" 
+                 type="number" 
+                 placeholder="请输入消耗热量"
+                 value="{{exerciseForm.kcal}}"
+                 bindinput="onExerciseKcalInput"/>
+        </view>
+        
+        <view class="form-buttons">
+          <button class="form-btn cancel" bindtap="onCloseModal">取消</button>
+          <button class="form-btn submit" bindtap="onSubmitExercise">确定</button>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>
+
+</view>

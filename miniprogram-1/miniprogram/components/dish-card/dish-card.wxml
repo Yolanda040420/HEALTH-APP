@@ -1,55 +1,115 @@
-<view class="card">
-  <!-- 上半部分：菜名 + 信息 -->
-  <view class="card-main">
-    <view class="left">
-      <view class="name">{{dish.name}}</view>
-      <view class="location">{{dish.location}}</view>
-      <view class="nutrition">
-        {{dish.kcal}} kcal · 蛋白质 {{dish.protein}} g
-      </view>
+<!-- components/dish-card/dish-card.wxml -->
 
-      <!-- 推荐模式：显示标签 -->
-      <view wx:if="{{mode === 'recommend' && dish.tags && dish.tags.length}}" class="tags">
-        <block wx:for="{{dish.tags}}" wx:key="*this">
-          <view class="tag">{{item}}</view>
-        </block>
-      </view>
+<!-- 推荐模式卡片 -->
+<view wx:if="{{mode === 'recommend'}}" class="dish-card recommend">
 
-      <!-- 菜单模式：显示菜品详情 -->
-      <view wx:if="{{mode === 'menu'}}" class="detail-link" bindtap="onDetailTap">
-        菜品详情
-      </view>
+<!-- 上半部分：左侧信息 + 右上角价格 -->
+<view class="top-row">
+  <view class="left">
+    <view class="name">{{dish.name}}</view>
+    <view class="location">{{dish.location}}</view>
+
+    <view class="meta">
+      {{dish.kcal}} kcal · 蛋白质 {{dish.protein}} g
     </view>
 
-    <view class="right">
-      <view class="price">¥ {{dish.price}}</view>
+    <view class="tags">
+      <view wx:for="{{dish.tags}}" wx:key="*this" class="tag">
+        {{item}}
+      </view>
     </view>
   </view>
 
-  <!-- 下半部分：加入饮食 + 图标 + 评分 -->
-  <view class="card-footer">
-    <text class="add-text" bindtap="onAddTap">加入饮食</text>
+  <view class="right">
+    <view class="price">¥ {{dish.price}}</view>
+  </view>
+</view>
 
-    <view class="footer-actions">
-      <text class="icon icon-heart {{dish.collected ? 'active' : ''}}"
-            bindtap="onLikeTap">
-        ♡
-      </text>
+<!-- 下半部分：左“加入饮食”，右 icon + 星级 -->
+<view class="bottom-row">
+  <view class="add-text" bindtap="onAddTap">加入饮食</view>
 
-      <text class="icon icon-block {{dish.blocked ? 'active' : ''}}"
-            bindtap="onBlockTap">
-        ⊘
-      </text>
+  <view class="actions">
+    <!-- 收藏：未收藏/已收藏 -->
+    <image
+      class="action-icon like-icon"
+      src="/images/recommend/{{dish.collected ? 'like-active' : 'like'}}.png"
+      mode="aspectFit"
+      bindtap="onLikeTap">
+    </image>
 
-      <view class="rating">
-        <block wx:for="{{stars}}" wx:key="*this">
-          <text class="star {{item <= dish.rating ? 'active' : ''}}"
-                data-score="{{item}}"
-                bindtap="onRateTap">
-            ★
-          </text>
-        </block>
-      </view>
+    <!-- 黑名单 -->
+    <image
+      class="action-icon block-icon"
+      src="/images/recommend/{{dish.blocked ? 'block-active' : 'block'}}.png"
+      mode="aspectFit"
+      bindtap="onBlockTap">
+    </image>
+
+    <!-- 星级评分
+    <view class="stars">
+      <image wx:for="{{[1,2,3,4,5]}}" wx:key="*this"
+            class="star-icon"
+            src="/images/recommend/{{item <= dish.rating ? 'rating-active' : 'rating'}}.png"
+            mode="aspectFit"
+            data-score="{{item}}"
+            bindtap="onStarTap">
+      </image>
+    </view> -->
+  </view>
+</view>
+
+</view>
+
+<!-- 菜单模式卡片 -->
+<view wx:elif="{{mode === 'menu'}}" class="dish-card menu">
+
+<!-- 上半部分：左信息 + 右圆角按钮 -->
+<view class="top-row">
+  <view class="left">
+    <view class="name">{{dish.name}}</view>
+    <view class="location">{{dish.location}}</view>
+
+    <view class="detail-link" bindtap="onDetailTap">
+      菜品详情
     </view>
   </view>
+
+  <view class="right">
+    <view class="add-btn" bindtap="onAddTap">加入饮食</view>
+  </view>
+</view>
+
+<!-- 下半部分：icon + 星级（靠右） -->
+<view class="bottom-row menu-bottom">
+  <view class="actions">
+    <!-- 菜单模式下的收藏 -->
+    <image
+      class="action-icon like-icon"
+      src="/images/recommend/{{dish.collected ? 'like-active' : 'like'}}.png"
+      mode="aspectFit"
+      bindtap="onLikeTap">
+    </image>
+
+    <!-- 菜单模式下的黑名单 -->
+    <image
+      class="action-icon block-icon"
+      src="/images/recommend/{{dish.blocked ? 'block-active' : 'block'}}.png"
+      mode="aspectFit"
+      bindtap="onBlockTap">
+    </image>
+
+    <!-- 星级评分 
+    <view class="stars">
+      <image wx:for="{{[1,2,3,4,5]}}" wx:key="*this"
+            class="star-icon"
+            src="/images/recommend/{{item <= dish.rating ? 'rating-active' : 'rating'}}.png"
+            mode="aspectFit"
+            data-score="{{item}}"
+            bindtap="onStarTap">
+      </image>
+    </view>-->
+  </view>
+</view>
+
 </view>

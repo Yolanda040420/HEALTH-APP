@@ -1,0 +1,115 @@
+<!-- pages/mine/index/index.wxml -->
+<view class="page">
+
+<!-- 用户信息头部 -->
+<view class="profile-header" style="padding-top: {{statusBarHeight}}px;">
+  <view class="profile-avatar" bindtap="onAvatarTap">
+    <image src="{{avatarUrl || '/images/tabbar/mine.png'}}" mode="aspectFill"></image>
+    <view class="avatar-edit-hint">
+      <text class="avatar-edit-icon">✎</text>
+    </view>
+  </view>
+  <view class="profile-info">
+    <text class="profile-name">{{name}}</text>
+    <text class="profile-subtitle">{{subtitle}}</text>
+  </view>
+</view>
+
+<!-- 个人信息卡片 -->
+<view class="info-card">
+  <view class="info-item">
+    <view class="info-item-left">
+      <image class="info-icon" src="/images/info/gender.png" mode="aspectFit"></image>
+      <text class="info-label">性别</text>
+    </view>
+    <text class="info-value">{{gender}}</text>
+  </view>
+  <view class="info-item">
+    <view class="info-item-left">
+      <image class="info-icon" src="/images/info/age.png" mode="aspectFit"></image>
+      <text class="info-label">年龄</text>
+    </view>
+    <text class="info-value">{{age}}</text>
+  </view>
+  <view class="info-item">
+    <view class="info-item-left">
+      <image class="info-icon" src="/images/info/weight.png" mode="aspectFit"></image>
+      <text class="info-label">体重</text>
+    </view>
+    <text class="info-value">{{weight}}kg</text>
+  </view>
+  <view class="info-item">
+    <view class="info-item-left">
+      <image class="info-icon" src="/images/info/height.png" mode="aspectFit"></image>
+      <text class="info-label">身高</text>
+    </view>
+    <text class="info-value">{{height}}cm</text>
+  </view>
+</view>
+
+<!-- 健身目标 -->
+<view class="goals-section">
+  <view class="section-title">
+    <image class="section-title-icon" src="/images/goal/goal.png" mode="aspectFit"></image>
+    <text class="section-title-text">健身目标</text>
+  </view>
+  <view class="goals-container">
+    <view class="goal-item {{selectedGoal==='lose'?'active':''}}" 
+          data-goal="lose"
+          bindtap="onGoalTap">
+      <image class="goal-icon" src="/images/goal/decrease.png" mode="aspectFit"></image>
+      <text class="goal-text">减脂</text>
+    </view>
+    <view class="goal-item {{selectedGoal==='maintain'?'active':''}}" 
+          data-goal="maintain"
+          bindtap="onGoalTap">
+      <image class="goal-icon" src="/images/goal/keep.png" mode="aspectFit"></image>
+      <text class="goal-text">维持</text>
+    </view>
+    <view class="goal-item {{selectedGoal==='gain'?'active':''}}" 
+          data-goal="gain"
+          bindtap="onGoalTap">
+      <image class="goal-icon" src="/images/goal/increase.png" mode="aspectFit"></image>
+      <text class="goal-text">增肌</text>
+    </view>
+  </view>
+</view>
+
+<!-- 今日摄入 -->
+<view class="intake-section">
+  <view class="intake-title-row">
+    <view class="section-title">
+      <image class="section-title-icon" src="/images/data.png" mode="aspectFit"></image>
+      <text class="section-title-text">今日摄入</text>
+    </view>
+    <view class="intake-progress">
+      <text class="intake-current">{{currentIntake}} kcal</text>
+      <text class="intake-target">目标: {{targetIntake}} kcal</text>
+    </view>
+  </view>
+  <view class="intake-bar">
+    <view class="intake-bar-bg">
+      <view class="intake-bar-fill" style="width: {{(intakePercent || 0) + '%'}}"></view>
+    </view>
+    <view class="intake-labels">
+      <text class="intake-label">0 kcal</text>
+      <text class="intake-label">{{targetIntake}} kcal</text>
+    </view>
+  </view>
+</view>
+
+<!-- 分隔线 -->
+<view class="divider"></view>
+
+<!-- 编辑个人信息按钮 -->
+<view class="edit-btn" bindtap="onEditProfile">
+  <image class="edit-icon" src="/images/edit.png" mode="aspectFit"></image>
+  <text class="edit-text">编辑个人信息</text>
+</view>
+
+<!-- 登出按钮 -->
+<view class="logout-btn" bindtap="onLogout">
+  <text class="logout-text">退出登录</text>
+</view>
+
+</view>

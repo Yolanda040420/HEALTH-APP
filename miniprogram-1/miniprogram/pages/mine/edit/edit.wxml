@@ -1,0 +1,94 @@
+<!-- pages/mine/edit/edit.wxml -->
+<view class="page">
+  <!-- 自定义导航栏 -->
+  <view class="custom-navbar" style="padding-top: {{statusBarHeight}}px;">
+    <view class="navbar-content">
+      <view class="navbar-back" bindtap="onBack">
+        <text class="back-icon">‹</text>
+      </view>
+      <text class="navbar-title">编辑个人信息</text>
+      <view class="navbar-placeholder"></view>
+    </view>
+  </view>
+
+  <scroll-view class="content-scroll" scroll-y="true" style="margin-top: 180rpx;">
+    <!-- 个人信息编辑 -->
+    <view class="edit-section">
+      <view class="section-title">
+        <text class="section-title-text">个人信息</text>
+      </view>
+      
+      <view class="edit-item">
+        <text class="edit-label">姓名</text>
+        <input class="edit-input" type="text" value="{{name}}" bindinput="onNameInput" placeholder="请输入姓名" />
+      </view>
+      
+      <view class="edit-item">
+        <text class="edit-label">性别</text>
+        <picker mode="selector" range="{{genderOptions}}" value="{{genderIndex}}" bindchange="onGenderChange">
+          <view class="picker-view">
+            <text class="picker-text">{{genderOptions[genderIndex]}}</text>
+            <text class="picker-arrow">›</text>
+          </view>
+        </picker>
+      </view>
+      
+      <view class="edit-item">
+        <text class="edit-label">年龄</text>
+        <input class="edit-input" type="number" value="{{age}}" bindinput="onAgeInput" placeholder="请输入年龄" />
+      </view>
+      
+      <view class="edit-item">
+        <text class="edit-label">体重 (kg)</text>
+        <input class="edit-input" type="digit" value="{{weight}}" bindinput="onWeightInput" placeholder="请输入体重" />
+      </view>
+      
+      <view class="edit-item">
+        <text class="edit-label">身高 (cm)</text>
+        <input class="edit-input" type="digit" value="{{height}}" bindinput="onHeightInput" placeholder="请输入身高" />
+      </view>
+    </view>
+
+    <!-- 今日摄入 -->
+    <view class="edit-section">
+      <view class="section-title">
+        <image class="section-title-icon" src="/images/data.png" mode="aspectFit"></image>
+        <text class="section-title-text">今日摄入</text>
+      </view>
+      
+      <view class="intake-display">
+        <view class="intake-title-row">
+          <view class="intake-info">
+            <text class="intake-label">当前摄入</text>
+            <text class="intake-value">{{currentIntake}} kcal</text>
+          </view>
+          <view class="intake-info">
+            <text class="intake-label">目标摄入</text>
+            <text class="intake-value">{{targetIntake}} kcal</text>
+          </view>
+        </view>
+        
+        <view class="intake-bar">
+          <view class="intake-bar-bg">
+            <view class="intake-bar-fill" style="width: {{(intakePercent || 0) + '%'}}"></view>
+          </view>
+          <view class="intake-labels">
+            <text class="intake-label-small">0 kcal</text>
+            <text class="intake-label-small">{{targetIntake}} kcal</text>
+          </view>
+        </view>
+      </view>
+      
+      <view class="edit-item">
+        <text class="edit-label">目标摄入 (kcal)</text>
+        <input class="edit-input" type="number" value="{{targetIntake}}" bindinput="onTargetIntakeInput" placeholder="请输入目标摄入" />
+      </view>
+    </view>
+
+    <!-- 保存按钮 -->
+    <view class="save-btn-container">
+      <button class="save-btn" bindtap="onSave">保存</button>
+    </view>
+  </scroll-view>
+</view>
+
